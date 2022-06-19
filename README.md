@@ -1,7 +1,7 @@
 # Slickgrid-Universal Vite Demos
 ## Multiple Demos of the [Slickgrid-Universal](https://github.com/ghiscoding/slickgrid-universal) library
 
-This project is demoing multiple examples of [Slickgrid-Universal](https://github.com/ghiscoding/slickgrid-universal), the routing and lazy loading are very basic and **not at all recommended for production release**, it was created for demo project only. 
+This project is demoing multiple examples of [Slickgrid-Universal](https://github.com/ghiscoding/slickgrid-universal), the routing and lazy loading are very basic and **not at all recommended for production release**, it was created for demo purpose only so please keep that in mind. 
 
 ### Install and Start Demo
 ```sh
