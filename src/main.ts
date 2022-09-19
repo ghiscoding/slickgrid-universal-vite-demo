@@ -7,7 +7,7 @@
 //   <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
 // `
 import 'jquery';
-import 'jquery-ui-dist/jquery-ui';
+import 'jquery-ui/dist/jquery-ui.min.js';
 
 // import all CSS required by Slickgrid-Universal
 import 'multiple-select-modified/src/multiple-select.css';
