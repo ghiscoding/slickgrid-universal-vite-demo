@@ -1,6 +1,6 @@
 // import { Instance as FlatpickrInstance } from 'flatpickr/dist/types/instance';
 import {
-  AutocompleteOption,
+  AutocompleterOption,
   BindingEventService,
   Column,
   CompositeEditorModalType,
@@ -21,6 +21,7 @@ import {
   formatNumber,
 } from '@slickgrid-universal/common';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
+import { SlickerGridInstance } from '@slickgrid-universal/vanilla-bundle';
 import { VanillaForceGridBundle, Slicker } from '@slickgrid-universal/vanilla-force-bundle';
 import { CompositeEditor, SlickCompositeEditorComponent } from '@slickgrid-universal/composite-editor-component';
 
@@ -85,12 +86,12 @@ export class Example12 {
   gridOptions: GridOption;
   dataset: any[] = [];
   isGridEditable = true;
-  editQueue: Array<{ item: any; columns: Column[]; editCommand: EditCommand }> = [];
+  editQueue = [];
   editedItems = {};
   isCompositeDisabled = false;
   isMassSelectionDisabled = true;
   gridContainerElm: HTMLDivElement;
-  cellCssStyleQueue: string[] = [];
+  cellCssStyleQueue = [];
   complexityLevelList = [
     { value: 0, label: 'Very Simple' },
     { value: 1, label: 'Simple' },
@@ -102,7 +103,7 @@ export class Example12 {
   // you would typically use `SlickVanillaGridBundle` instead, we use `VanillaForceGridBundle` just to test that Salesforce package
   sgb: VanillaForceGridBundle;
 
-  get slickerGridInstance() {
+  get slickerGridInstance(): SlickerGridInstance {
     return this.sgb?.instances;
   }
 
@@ -114,7 +115,7 @@ export class Example12 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(500);
-    this.gridContainerElm = document.querySelector(`.grid12`) as HTMLDivElement;
+    this.gridContainerElm = document.querySelector<HTMLDivElement>(`.grid12`);
 
     this.sgb = new Slicker.GridBundle(this.gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions });
     this.sgb.dataset = this.dataset;
@@ -136,7 +137,7 @@ export class Example12 {
   dispose() {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
-    this.gridContainerElm = null as any;
+    this.gridContainerElm = null;
   }
 
   initializeGrid() {
@@ -290,17 +291,16 @@ export class Example12 {
         type: FieldType.object,
         sortComparer: SortComparers.objectString,
         editor: {
-          model: Editors.autoComplete,
+          model: Editors.autocompleter,
           alwaysSaveOnEnterKey: true,
           massUpdate: true,
 
           // example with a Remote API call
           editorOptions: {
             minLength: 1,
-            source: (request, response) => {
-              // const items = require('c://TEMP/items.json');
+            fetch: (searchTerm, callback) => {
               const products = this.mockProducts();
-              response(products.filter(product => product.itemName.toLowerCase().includes(request.term.toLowerCase())));
+              callback(products.filter(product => product.itemName.toLowerCase().includes(searchTerm.toLowerCase())));
             },
             renderItem: {
               // layout: 'twoRows',
@@ -309,11 +309,11 @@ export class Example12 {
               layout: 'fourCorners',
               templateCallback: (item: any) => this.renderItemCallbackWith4Corners(item),
             },
-          } as AutocompleteOption,
+          } as AutocompleterOption,
         },
         filter: {
           model: Filters.inputText,
-          // placeholder: '🔎︎ search city',
+          // placeholder: '🔎︎ search product',
           type: FieldType.string,
           queryField: 'product.itemName',
         }
@@ -330,19 +330,18 @@ export class Example12 {
         sortable: true,
         minWidth: 100,
         editor: {
-          model: Editors.autoComplete,
+          model: Editors.autocompleter,
           alwaysSaveOnEnterKey: true,
           massUpdate: true,
           editorOptions: {
             minLength: 0,
-            openSearchListOnFocus: false,
-            // onSelect: (e, ui, row, cell, column, dataContext) => console.log(ui, column, dataContext),
-            source: (request, response) => {
+            showOnFocus: false,
+            fetch: (searchText, updateCallback) => {
               const countries: any[] = require('./data/countries.json');
-              const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(request.term.toLowerCase()));
-              response(foundCountries.map(item => ({ label: item.name, value: item.code, })));
+              const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
+              updateCallback(foundCountries.map(item => ({ label: item.name, value: item.code, })));
             },
-          },
+          } as AutocompleterOption,
         },
         filter: {
           model: Filters.inputText,
@@ -382,8 +381,8 @@ export class Example12 {
               },
               action: (_event, args) => {
                 const dataContext = args.dataContext;
-                if (confirm(`Do you really want to delete row (${args.row! + 1}) with "${dataContext.title}"`)) {
-                  this.slickerGridInstance?.gridService.deleteItemById(dataContext.id);
+                if (confirm(`Do you really want to delete row (${args.row + 1}) with "${dataContext.title}"`)) {
+                  this.slickerGridInstance.gridService.deleteItemById(dataContext.id);
                 }
               }
             },
@@ -397,13 +396,13 @@ export class Example12 {
       autoFixResizeRequiredGoodCount: 1,
       datasetIdPropertyName: 'id',
       eventNamingStyle: EventNamingStyle.lowerCase,
-      editable: true,
       autoAddCustomEditorFormatter: customEditableInputFormatter,
       enableAddRow: true, // <-- this flag is required to work with the (create & clone) modal types
       enableCellNavigation: true,
       asyncEditorLoading: false,
       autoEdit: true,
       autoCommitEdit: true,
+      editable: true,
       autoResize: {
         container: '.demo-container',
       },
@@ -452,7 +451,7 @@ export class Example12 {
           if (prevSerializedValue !== serializedValue || serializedValue === '') {
             const finalColumn = Array.isArray(editCommand.prevSerializedValue) ? editorColumns[index] : column;
             this.editedItems[this.gridOptions.datasetIdPropertyName || 'id'] = item; // keep items by their row indexes, if the row got edited twice then we'll keep only the last change
-            this.sgb.slickGrid?.invalidate();
+            this.sgb.slickGrid.invalidate();
             editCommand.execute();
 
             this.renderUnsavedCellStyling(item, finalColumn, editCommand);
@@ -472,7 +471,7 @@ export class Example12 {
 
   loadData(count: number) {
     // mock data
-    const tmpArray: any[] = [];
+    const tmpArray = [];
     for (let i = 0; i < count; i++) {
       const randomItemId = Math.floor(Math.random() * this.mockProducts().length);
       const randomYear = 2000 + Math.floor(Math.random() * 10);
@@ -604,7 +603,6 @@ export class Example12 {
     /*
     if (columnDef.id === 'completed') {
       this.compositeEditorInstance.changeFormEditorOption('percentComplete', 'filter', true); // multiple-select.js, show filter in dropdown
-      this.compositeEditorInstance.changeFormEditorOption('product', 'minLength', 3);         // autocomplete, change minLength char to type
       this.compositeEditorInstance.changeFormEditorOption('finish', 'minDate', 'today');      // flatpickr, change minDate to today
     }
     */
@@ -640,7 +638,7 @@ export class Example12 {
   removeUnsavedStylingFromCell(_item: any, column: Column, row: number) {
     // remove unsaved css class from that cell
     const cssStyleKey = `unsaved_highlight_${[column.id]}${row}`;
-    this.sgb.slickGrid?.removeCellCssStyles(cssStyleKey);
+    this.sgb.slickGrid.removeCellCssStyles(cssStyleKey);
     const foundIdx = this.cellCssStyleQueue.findIndex(styleKey => styleKey === cssStyleKey);
     if (foundIdx >= 0) {
       this.cellCssStyleQueue.splice(foundIdx, 1);
@@ -649,7 +647,7 @@ export class Example12 {
 
   removeAllUnsavedStylingFromCell() {
     for (const cssStyleKey of this.cellCssStyleQueue) {
-      this.sgb.slickGrid?.removeCellCssStyles(cssStyleKey);
+      this.sgb.slickGrid.removeCellCssStyles(cssStyleKey);
     }
     this.cellCssStyleQueue = [];
   }
@@ -669,11 +667,11 @@ export class Example12 {
 
   renderUnsavedCellStyling(item, column, editCommand) {
     if (editCommand && item && column) {
-      const row = this.sgb.dataView?.getRowByItem(item) as number;
+      const row = this.sgb.dataView.getRowByItem(item);
       if (row >= 0) {
         const hash = { [row]: { [column.id]: 'unsaved-editable-field' } };
         const cssStyleKey = `unsaved_highlight_${[column.id]}${row}`;
-        this.sgb.slickGrid?.setCellCssStyles(`unsaved_highlight_${[column.id]}${row}`, hash);
+        this.sgb.slickGrid.setCellCssStyles(`unsaved_highlight_${[column.id]}${row}`, hash);
         this.cellCssStyleQueue.push(cssStyleKey);
       }
     }
@@ -706,12 +704,12 @@ export class Example12 {
       for (const lastEditColumn of lastEdit.columns) {
         this.removeUnsavedStylingFromCell(lastEdit.item, lastEditColumn, lastEditCommand.row);
       }
-      this.sgb.slickGrid?.invalidate();
+      this.sgb.slickGrid.invalidate();
 
 
       // optionally open the last cell editor associated
       if (showLastEditor) {
-        this.sgb?.slickGrid?.gotoCell(lastEditCommand.row, lastEditCommand.cell, false);
+        this.sgb?.slickGrid.gotoCell(lastEditCommand.row, lastEditCommand.cell, false);
       }
     }
   }
@@ -728,7 +726,7 @@ export class Example12 {
         }
       }
     }
-    this.sgb.slickGrid?.invalidate(); // re-render the grid only after every cells got rolled back
+    this.sgb.slickGrid.invalidate(); // re-render the grid only after every cells got rolled back
     this.editQueue = [];
   }
 
@@ -741,7 +739,7 @@ export class Example12 {
         listPrice: 2100.23,
         itemTypeName: 'I',
         image: 'http://i.stack.imgur.com/pC1Tv.jpg',
-        icon: `mdi ${this.getRandomIcon(0)}`,
+        icon: this.getRandomIcon(0)
       },
       {
         id: 1,
@@ -750,7 +748,7 @@ export class Example12 {
         listPrice: 3200.12,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/Fnm7j6h.jpg',
-        icon: `mdi ${this.getRandomIcon(1)}`,
+        icon: this.getRandomIcon(1)
       },
       {
         id: 2,
@@ -759,7 +757,7 @@ export class Example12 {
         listPrice: 15.00,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/RaVJuLr.jpg',
-        icon: `mdi ${this.getRandomIcon(2)}`,
+        icon: this.getRandomIcon(2)
       },
       {
         id: 3,
@@ -768,7 +766,7 @@ export class Example12 {
         listPrice: 25.76,
         itemTypeName: 'I',
         image: 'http://i.stack.imgur.com/pC1Tv.jpg',
-        icon: `mdi ${this.getRandomIcon(3)}`,
+        icon: this.getRandomIcon(3)
       },
       {
         id: 4,
@@ -777,7 +775,7 @@ export class Example12 {
         listPrice: 13.35,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/Fnm7j6h.jpg',
-        icon: `mdi ${this.getRandomIcon(4)}`,
+        icon: this.getRandomIcon(4)
       },
       {
         id: 5,
@@ -786,7 +784,7 @@ export class Example12 {
         listPrice: 23.33,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/RaVJuLr.jpg',
-        icon: `mdi ${this.getRandomIcon(5)}`,
+        icon: this.getRandomIcon(5)
       },
       {
         id: 6,
@@ -795,7 +793,7 @@ export class Example12 {
         listPrice: 71.21,
         itemTypeName: 'I',
         image: 'http://i.stack.imgur.com/pC1Tv.jpg',
-        icon: `mdi ${this.getRandomIcon(6)}`,
+        icon: this.getRandomIcon(6)
       },
       {
         id: 7,
@@ -804,7 +802,7 @@ export class Example12 {
         listPrice: 2.43,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/Fnm7j6h.jpg',
-        icon: `mdi ${this.getRandomIcon(7)}`,
+        icon: this.getRandomIcon(7)
       },
       {
         id: 8,
@@ -813,7 +811,7 @@ export class Example12 {
         listPrice: 31288.39,
         itemTypeName: 'I',
         image: 'https://i.imgur.com/RaVJuLr.jpg',
-        icon: `mdi ${this.getRandomIcon(8)}`,
+        icon: this.getRandomIcon(8)
       },
     ];
   }
@@ -888,31 +886,31 @@ export class Example12 {
           <span class="mdi ${item.itemTypeName === 'I' ? 'mdi-information-outline' : 'mdi-content-copy'} mdi-14px"></span>
           ${item.itemName}
         </span>
-      <div>
-    </div>
-    <div>
-      <div class="autocomplete-bottom-left">${item.itemNameTranslated}</div>
-    </div>`;
+        <div>
+        </div>
+        <div>
+        <div class="autocomplete-bottom-left">${item.itemNameTranslated}</div>
+      </div>`;
   }
 
   renderItemCallbackWith4Corners(item: any): string {
     return `<div class="autocomplete-container-list">
-          <div class="autocomplete-left">
-            <!--<img src="http://i.stack.imgur.com/pC1Tv.jpg" width="50" />-->
-            <span class="mdi ${item.icon} mdi-26px"></span>
-          </div>
-          <div>
-            <span class="autocomplete-top-left">
-              <span class="mdi ${item.itemTypeName === 'I' ? 'mdi-information-outline' : 'mdi-content-copy'} mdi-14px"></span>
-              ${item.itemName}
-            </span>
-            <span class="autocomplete-top-right">${formatNumber(item.listPrice, 2, 2, false, '$')}</span>
-          <div>
-        </div>
-        <div>
-          <div class="autocomplete-bottom-left">${item.itemNameTranslated}</div>
-          <span class="autocomplete-bottom-right">Type: <b>${item.itemTypeName === 'I' ? 'Item' : item.itemTypeName === 'C' ? 'PdCat' : 'Cat'}</b></span>
-        </div>`;
+      <div class="autocomplete-left">
+        <!--<img src="http://i.stack.imgur.com/pC1Tv.jpg" width="50" />-->
+        <span class="mdi ${item.icon} mdi-26px"></span>
+      </div>
+      <div>
+        <span class="autocomplete-top-left">
+          <span class="mdi ${item.itemTypeName === 'I' ? 'mdi-information-outline' : 'mdi-content-copy'} mdi-14px"></span>
+          ${item.itemName}
+        </span>
+        <span class="autocomplete-top-right">${formatNumber(item.listPrice, 2, 2, false, '$')}</span>
+      <div>
+    </div>
+    <div>
+      <div class="autocomplete-bottom-left">${item.itemNameTranslated}</div>
+      <span class="autocomplete-bottom-right">Type: <b>${item.itemTypeName === 'I' ? 'Item' : item.itemTypeName === 'C' ? 'PdCat' : 'Cat'}</b></span>
+    </div>`;
   }
 
   openCompositeModal(modalType: CompositeEditorModalType, openDelay = 0) {

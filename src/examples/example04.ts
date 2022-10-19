@@ -1,9 +1,8 @@
 import {
-  AutocompleteOption,
+  AutocompleterOption,
   BindingEventService,
   Column,
   ColumnEditorDualInput,
-  EditCommand,
   Editors,
   FieldType,
   Filters,
@@ -15,11 +14,16 @@ import {
 } from '@slickgrid-universal/common';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
+// import { fetch } from 'whatwg-fetch';
+
 import { ExampleGridOptions } from './example-grid-options';
-import './example02.scss';
+import './example04.scss';
+
+// const URL_COUNTRIES_COLLECTION = 'assets/data/countries.json';
+// const URL_COUNTRY_NAMES_COLLECTION = 'assets/data/country_names.json';
 
 // you can create custom validator to pass to an inline editor
-const myCustomTitleValidator = (value, _args) => {
+const myCustomTitleValidator = (value) => {
   if (value === null || value === undefined || !value.length) {
     return { valid: false, msg: 'This is a required field' };
   } else if (!/^Task\s\d+$/.test(value)) {
@@ -50,7 +54,7 @@ export class Example4 {
   gridOptions: GridOption;
   dataset: any[];
   dataViewObj: SlickDataView;
-  commandQueue: EditCommand[] = [];
+  commandQueue = [];
   frozenColumnCount = 2;
   frozenRowCount = 3;
   isFrozenBottom = false;
@@ -62,7 +66,7 @@ export class Example4 {
 
   attached() {
     const dataset = this.initializeGrid();
-    const gridContainerElm = document.querySelector(`.grid4`) as HTMLDivElement;
+    const gridContainerElm = document.querySelector<HTMLDivElement>(`.grid4`);
 
     // this._bindingEventService.bind(gridContainerElm, 'onclick', handleOnClick);
     this._bindingEventService.bind(gridContainerElm, 'onvalidationerror', this.handleOnValidationError.bind(this));
@@ -86,7 +90,7 @@ export class Example4 {
           alwaysSaveOnEnterKey: true,
           validator: myCustomTitleValidator, // use a custom validator
         },
-        formatter: customEditableInputFormatter as Formatter,
+        formatter: customEditableInputFormatter,
         filterable: true,
       },
       {
@@ -222,8 +226,20 @@ export class Example4 {
         filterable: true,
         sortable: true,
         minWidth: 100,
+        // formatter: (_, __, val) => typeof val === 'string' ? val : val.name,
+        // editor: {
+        //   model: Editors.autocompleter,
+        //   // collectionAsync: fetch(URL_COUNTRY_NAMES_COLLECTION),
+        //   placeholder: '🔎︎ search country',
+        //   customStructure: { label: 'name', value: 'code' },
+        //   // collectionAsync: fetch(URL_COUNTRIES_COLLECTION),
+
+        //   enableRenderHtml: true,
+        //   collection: [{ code: true, name: 'True', labelPrefix: `<i class="mdi mdi-pin-outline"></i> ` }, { code: false, name: 'False', labelSuffix: '<i class="mdi mdi-close"></i>' }],
+        //   editorOptions: { minLength: 1 }
+        // },
         editor: {
-          model: Editors.autoComplete,
+          model: Editors.autocompleter,
           placeholder: '🔎︎ search city',
 
           // We can use the autocomplete through 3 ways "collection", "collectionAsync" or with your own autocomplete options
@@ -231,45 +247,58 @@ export class Example4 {
           // here we use $.ajax just because I'm not sure how to configure HttpClient with JSONP and CORS
           editorOptions: {
             minLength: 3,
-            forceUserInput: true,
-            source: (request, response) => {
+            fetch: (searchText, updateCallback) => {
               $.ajax({
                 url: 'http://gd.geobytes.com/AutoCompleteCity',
                 dataType: 'jsonp',
                 data: {
-                  q: request.term
+                  q: searchText
                 },
                 success: (data) => {
-                  response(data);
+                  const finalData = (data.length === 1 && data[0] === '') ? [] : data; // invalid result should be [] instead of [''
+                  updateCallback(finalData);
                 }
               });
-            }
-          } as AutocompleteOption,
+            },
+          } as AutocompleterOption,
         },
+        // filter: {
+        //   model: Filters.autocompleter,
+        //   // collectionAsync: fetch(URL_COUNTRY_NAMES_COLLECTION),
+        //   placeholder: '🔎︎ search country',
+        //   customStructure: { label: 'name', value: 'code' },
+        //   collectionAsync: fetch(URL_COUNTRIES_COLLECTION),
+
+        //   // enableRenderHtml: true,
+        //   // collection: [{ code: true, name: 'True', labelPrefix: `<i class="mdi mdi-pin-outline"></i> ` }, { code: false, name: 'False', labelSuffix: '<i class="mdi mdi-close"></i>' }],
+        //   // filterOptions: { minLength: 1 }
+        // },
         filter: {
-          model: Filters.autoComplete,
+          model: Filters.autocompleter,
           // placeholder: '🔎︎ search city',
+          // customStructure: { label: 'name', value: 'code' },
 
           // We can use the autocomplete through 3 ways "collection", "collectionAsync" or with your own autocomplete options
-          // collectionAsync: this.httpFetch.fetch(URL_COUNTRIES_COLLECTION),
+          // collectionAsync: fetch(URL_COUNTRIES_COLLECTION),
 
           // OR use your own autocomplete options, instead of $.ajax, use HttpClient or FetchClient
           // here we use $.ajax just because I'm not sure how to configure HttpClient with JSONP and CORS
           filterOptions: {
             minLength: 3,
-            source: (request, response) => {
+            fetch: (searchText, updateCallback) => {
               $.ajax({
                 url: 'http://gd.geobytes.com/AutoCompleteCity',
                 dataType: 'jsonp',
                 data: {
-                  q: request.term
+                  q: searchText
                 },
                 success: (data) => {
-                  response(data);
+                  const finalData = (data.length === 1 && data[0] === '') ? [] : data; // invalid result should be [] instead of ['']
+                  updateCallback(finalData);
                 }
               });
-            }
-          } as AutocompleteOption,
+            },
+          } as AutocompleterOption,
         }
       },
       {
@@ -456,8 +485,8 @@ export class Example4 {
   }
 
   setFrozenColumns(frozenCols: number) {
-    this.sgb?.slickGrid?.setOptions({ frozenColumn: frozenCols, alwaysShowVerticalScroll: false });
-    this.gridOptions = this.sgb?.slickGrid?.getOptions() as GridOption;
+    this.sgb?.slickGrid.setOptions({ frozenColumn: frozenCols, alwaysShowVerticalScroll: false });
+    this.gridOptions = this.sgb?.slickGrid.getOptions();
   }
 
   /** toggle dynamically, through slickgrid "setOptions()" the top/bottom pinned location */

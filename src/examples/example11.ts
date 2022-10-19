@@ -1,5 +1,5 @@
 import {
-  AutocompleteOption,
+  AutocompleterOption,
   BindingEventService,
   DOMEvent,
   Column,
@@ -7,7 +7,6 @@ import {
   CurrentFilter,
   CurrentPinning,
   CurrentSorter,
-  EditCommand,
   Editors,
   FieldType,
   Filters,
@@ -27,7 +26,7 @@ import { Slicker, SlickerGridInstance, SlickVanillaGridBundle } from '@slickgrid
 import moment from 'moment-mini';
 
 import { ExampleGridOptions } from './example-grid-options';
-import { loadComponent } from './utilities';
+import { loadComponent } from 'examples/utilities';
 import './example11.scss';
 
 // using external SlickGrid JS libraries
@@ -68,11 +67,11 @@ export class Example11 {
   columnDefinitions: Column[];
   gridOptions: GridOption;
   dataset: any[] = [];
-  currentSelectedViewPreset?: ViewDefinition;
+  currentSelectedViewPreset: ViewDefinition;
   isGridEditable = true;
   dropdownDeleteViewClass = 'dropdown-item dropdown-item-disabled';
   dropdownUpdateViewClass = 'dropdown-item dropdown-item-disabled';
-  editQueue: Array<{ item: any; column: Column; editCommand: EditCommand }> = [];
+  editQueue = [];
   editedItems = {};
   sgb: SlickVanillaGridBundle;
   gridContainerElm: HTMLDivElement;
@@ -103,7 +102,7 @@ export class Example11 {
   ] as ViewDefinition[];
   predefinedViews = [...this.defaultPredefinedPresets];
 
-  get slickerGridInstance() {
+  get slickerGridInstance(): SlickerGridInstance {
     return this.sgb?.instances;
   }
 
@@ -114,7 +113,7 @@ export class Example11 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(500);
-    this.gridContainerElm = document.querySelector(`.grid11`) as HTMLDivElement;
+    this.gridContainerElm = document.querySelector<HTMLDivElement>(`.grid11`);
 
     this.sgb = new Slicker.GridBundle(this.gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
 
@@ -127,7 +126,7 @@ export class Example11 {
   dispose() {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
-    this.gridContainerElm = null as any;
+    this.gridContainerElm = null;
   }
 
   initializeGrid() {
@@ -197,17 +196,16 @@ export class Example11 {
         type: FieldType.object,
         sortComparer: SortComparers.objectString,
         editor: {
-          model: Editors.autoComplete,
+          model: Editors.autocompleter,
           alwaysSaveOnEnterKey: true,
           massUpdate: true,
           // example with a Remote API call
           editorOptions: {
-            openSearchListOnFocus: true,
+            showOnFocus: true,
             minLength: 1,
-            source: (request, response) => {
-              // const items = require('c://TEMP/items.json');
+            fetch: (searchText, updateCallback) => {
               const products = this.mockProducts();
-              response(products.filter(product => product.itemName.toLowerCase().includes(request.term.toLowerCase())));
+              updateCallback(products.filter(product => product.itemName.toLowerCase().includes(searchText.toLowerCase())));
             },
             renderItem: {
               // layout: 'twoRows',
@@ -216,7 +214,7 @@ export class Example11 {
               layout: 'fourCorners',
               templateCallback: (item: any) => this.renderItemCallbackWith4Corners(item),
             },
-          } as AutocompleteOption,
+          } as AutocompleterOption,
         },
         filter: {
           model: Filters.inputText,
@@ -237,17 +235,17 @@ export class Example11 {
         sortable: true,
         minWidth: 100,
         editor: {
-          model: Editors.autoComplete,
+          model: Editors.autocompleter,
           alwaysSaveOnEnterKey: true,
           massUpdate: true,
           editorOptions: {
             minLength: 1,
-            source: (request, response) => {
+            fetch: (searchText, updateCallback) => {
               const countries: any[] = require('./data/countries.json');
-              const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(request.term.toLowerCase()));
-              response(foundCountries.map(item => ({ label: item.name, value: item.code, })));
+              const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
+              updateCallback(foundCountries.map(item => ({ label: item.name, value: item.code, })));
             },
-          },
+          } as AutocompleterOption,
         },
         filter: {
           model: Filters.inputText,
@@ -264,10 +262,10 @@ export class Example11 {
           const dataContext = args.dataContext;
           if ((event.target as HTMLElement).classList.contains('mdi-close')) {
             if (confirm(`Do you really want to delete row (${args.row + 1}) with "${dataContext.title}"`)) {
-              this.slickerGridInstance?.gridService.deleteItemById(dataContext.id);
+              this.slickerGridInstance.gridService.deleteItemById(dataContext.id);
             }
           } else if ((event.target as HTMLElement).classList.contains('mdi-check-underline')) {
-            this.slickerGridInstance?.gridService.updateItem({ ...dataContext, completed: true });
+            this.slickerGridInstance.gridService.updateItem({ ...dataContext, completed: true });
             alert(`The "${dataContext.title}" is now Completed`);
           }
         }
@@ -310,11 +308,11 @@ export class Example11 {
         if (editCommand.prevSerializedValue !== editCommand.serializedValue) {
           this.editQueue.push({ item, column, editCommand });
           this.editedItems[editCommand.row] = item; // keep items by their row indexes, if the row got edited twice then we'll keep only the last change
-          this.sgb.slickGrid?.invalidate();
+          this.sgb.slickGrid.invalidate();
           editCommand.execute();
 
           const hash = { [editCommand.row]: { [column.id]: 'unsaved-editable-field' } };
-          this.sgb.slickGrid?.setCellCssStyles(`unsaved_highlight_${[column.id]}${editCommand.row}`, hash);
+          this.sgb.slickGrid.setCellCssStyles(`unsaved_highlight_${[column.id]}${editCommand.row}`, hash);
         }
       },
       enableContextMenu: true,
@@ -346,7 +344,7 @@ export class Example11 {
       }
     };
 
-    const definedPresets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) as string);
+    const definedPresets = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || null);
     if (definedPresets) {
       const presetSelection = definedPresets.find(presetSelect => presetSelect.isSelected);
       this.predefinedViews = definedPresets;
@@ -373,7 +371,7 @@ export class Example11 {
 
   loadData(count: number) {
     // mock data
-    const tmpArray: any[] = [];
+    const tmpArray = [];
     for (let i = 0; i < count; i++) {
       const randomItemId = Math.floor(Math.random() * this.mockProducts().length);
       const randomYear = 2000 + Math.floor(Math.random() * 10);
@@ -427,12 +425,12 @@ export class Example11 {
         break;
       case 'delete-row':
         if (confirm(`Do you really want to delete row (${args.row + 1}) with "${dataContext.title}"`)) {
-          this.slickerGridInstance?.gridService.deleteItemById(dataContext.id);
+          this.slickerGridInstance.gridService.deleteItemById(dataContext.id);
         }
         break;
       case 'modal':
-        this.sgb.slickGrid?.getSelectedRows() || [];
-        const modalContainerElm = document.querySelector('.modal-container') as HTMLDivElement;
+        this.sgb.slickGrid.getSelectedRows() || [];
+        const modalContainerElm = document.querySelector<HTMLDivElement>('.modal-container');
         const columnDefinitionsClone = deepCopy(this.columnDefinitions);
         const massUpdateColumnDefinitions = columnDefinitionsClone?.filter((col: Column) => col.editor?.massUpdate || col.internalColumnEditor?.massUpdate) || [];
         const selectedItems = this.sgb.gridService.getSelectedRowsDataItem();
@@ -469,7 +467,7 @@ export class Example11 {
   }
 
   remoteCallbackFn(args: { item: any, selectedIds: string[], updateType: 'selection' | 'mass' }) {
-    const fields: any[] = [];
+    const fields = [];
     for (const key in args.item) {
       if (args.item.hasOwnProperty(key)) {
         fields.push({ fieldName: key, value: args.item[key] });
@@ -479,9 +477,9 @@ export class Example11 {
 
     if (args.updateType === 'selection' && Array.isArray(args.selectedIds) && args.selectedIds.length > 0) {
       // update only the selected rows
-      const updatedItems: any[] = [];
+      const updatedItems = [];
       for (const itemId of args.selectedIds) {
-        const dataContext = this.sgb.dataView?.getItemById(itemId);
+        const dataContext = this.sgb.dataView.getItemById(itemId);
         for (const itemProp in args.item) {
           if (args.item.hasOwnProperty(itemProp)) {
             const newValue = args.item[itemProp];
@@ -516,7 +514,7 @@ export class Example11 {
 
   removeUnsavedStylingFromCell(_item: any, column: Column, row: number) {
     // remove unsaved css class from that cell
-    this.sgb.slickGrid?.removeCellCssStyles(`unsaved_highlight_${[column.field]}${row}`);
+    this.sgb.slickGrid.removeCellCssStyles(`unsaved_highlight_${[column.field]}${row}`);
   }
 
   removeAllUnsavedStylingFromCell() {
@@ -554,12 +552,12 @@ export class Example11 {
 
       // remove unsaved css class from that cell
       this.removeUnsavedStylingFromCell(lastEdit.item, lastEdit.column, lastEditCommand.row);
-      this.sgb.slickGrid?.invalidate();
+      this.sgb.slickGrid.invalidate();
 
 
       // optionally open the last cell editor associated
       if (showLastEditor) {
-        this.sgb?.slickGrid?.gotoCell(lastEditCommand.row, lastEditCommand.cell, false);
+        this.sgb?.slickGrid.gotoCell(lastEditCommand.row, lastEditCommand.cell, false);
       }
     }
   }
@@ -574,7 +572,7 @@ export class Example11 {
         this.removeUnsavedStylingFromCell(lastEdit.item, lastEdit.column, lastEditCommand.row);
       }
     }
-    this.sgb.slickGrid?.invalidate(); // re-render the grid only after every cells got rolled back
+    this.sgb.slickGrid.invalidate(); // re-render the grid only after every cells got rolled back
     this.editQueue = [];
   }
 
@@ -587,7 +585,7 @@ export class Example11 {
       this.predefinedViews.forEach(viewSelect => viewSelect.isSelected = false); // reset selection
     }
     const presetViews: ViewDefinition[] = Array.isArray(predefinedViews) ? predefinedViews : [predefinedViews];
-    const viewSelect = document.querySelector('.selected-view') as HTMLDivElement;
+    const viewSelect = document.querySelector('.selected-view');
 
     // empty an empty <option> when populating the array on page load
     if (Array.isArray(predefinedViews)) {
@@ -615,7 +613,7 @@ export class Example11 {
 
   recreatePredefinedViews() {
     // empty the Select dropdown element and re-populate it
-    const viewSelectElm = document.querySelector('.selected-view') as HTMLDivElement;
+    const viewSelectElm = document.querySelector('.selected-view');
     viewSelectElm.innerHTML = '';
     this.pushNewViewToViewsList(this.predefinedViews);
   }
@@ -660,7 +658,7 @@ export class Example11 {
       return;
     }
     if (this.currentSelectedViewPreset) {
-      const selectedViewIndex = this.predefinedViews.findIndex(preset => preset.value === this.currentSelectedViewPreset?.value);
+      const selectedViewIndex = this.predefinedViews.findIndex(preset => preset.value === this.currentSelectedViewPreset.value);
       this.predefinedViews.splice(selectedViewIndex, 1);
     }
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.predefinedViews));
@@ -685,7 +683,7 @@ export class Example11 {
     const { columns, filters, sorters, pinning } = currentGridState;
 
     if (this.currentSelectedViewPreset && filters) {
-      const filterName = await prompt(`Update View name or click on OK to continue.`, this.currentSelectedViewPreset.label) as string;
+      const filterName = await prompt(`Update View name or click on OK to continue.`, this.currentSelectedViewPreset.label);
       this.currentSelectedViewPreset.label = filterName;
       this.currentSelectedViewPreset.value = filterName.replace(/\s/g, '');
       this.currentSelectedViewPreset.columns = columns || [];
@@ -721,7 +719,7 @@ export class Example11 {
     }
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.predefinedViews));
     this.currentSelectedViewPreset = selectedView;
-    this.sgb.slickGrid?.scrollColumnIntoView(0);
+    this.sgb.slickGrid.scrollColumnIntoView(0);
   }
 
   mockProducts() {

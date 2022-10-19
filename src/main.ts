@@ -7,14 +7,12 @@
 //   <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
 // `
 import 'jquery';
-import 'jquery-ui/dist/jquery-ui.min.js';
 
 // import all CSS required by Slickgrid-Universal
 import 'multiple-select-modified/src/multiple-select.css';
 import 'flatpickr/dist/flatpickr.min.css';
 import './styles.scss';
-// import all other 3rd party libs required by Slickgrid-Universal
-// also only import jQueryUI necessary widget (note autocomplete & slider are imported in their respective editors/filters)
+
 import { Renderer } from './renderer';
 import * as SlickerModule from '@slickgrid-universal/vanilla-bundle';
 import { App } from './app';
