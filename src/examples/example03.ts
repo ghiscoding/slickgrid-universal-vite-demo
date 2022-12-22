@@ -2,7 +2,6 @@ import {
   Aggregators,
   BindingEventService,
   Column,
-  EditCommand,
   Editors,
   FieldType,
   FileType,
@@ -41,7 +40,7 @@ export class Example3 {
   columnDefinitions: Column<ReportItem & { action: string; }>[];
   gridOptions: GridOption;
   dataset: any[];
-  editCommandQueue: EditCommand[] = [];
+  editCommandQueue = [];
   excelExportService: ExcelExportService;
   sgb: SlickVanillaGridBundle;
   durationOrderByCount = false;
@@ -142,7 +141,7 @@ export class Example3 {
           model: Editors.slider,
           minValue: 0,
           maxValue: 100,
-          // params: { hideSliderNumber: true },
+          // editorOptions: { hideSliderNumber: true } as SliderOption,
         },
         sortable: true, filterable: true,
         filter: { model: Filters.slider, operator: '>=' },
@@ -303,10 +302,14 @@ export class Example3 {
       rowHeight: 33,
       headerRowHeight: 35,
       enableDraggableGrouping: true,
+      // frozenColumn: 2,
       draggableGrouping: {
         dropPlaceHolderText: 'Drop a column header here to group by the column',
+        // hideGroupSortIcons: true,
         // groupIconCssClass: 'fa fa-outdent',
         deleteIconCssClass: 'mdi mdi-close color-danger',
+        sortAscIconCssClass: 'mdi mdi-arrow-up',
+        sortDescIconCssClass: 'mdi mdi-arrow-down',
         onGroupChanged: (_e, args) => this.onGroupChanged(args),
         onExtensionRegistered: (extension) => this.draggableGroupingPlugin = extension,
         // groupIconCssClass: 'mdi mdi-drag-vertical',
@@ -381,9 +384,7 @@ export class Example3 {
   }
 
   clearGrouping() {
-    if (this.draggableGroupingPlugin) {
-      this.draggableGroupingPlugin.clearDroppedGroups();
-    }
+    this.draggableGroupingPlugin.clearDroppedGroups();
     this.sgb?.slickGrid?.invalidate(); // invalidate all rows and re-render
   }
 

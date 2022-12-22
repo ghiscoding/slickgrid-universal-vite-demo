@@ -232,7 +232,6 @@ export class Example7 {
       showCustomFooter: true,
       enableExcelExport: true,
       excelExportOptions: {
-        exportWithFormatter: true,
         sanitizeDataExport: true
       },
       enableCellMenu: true,

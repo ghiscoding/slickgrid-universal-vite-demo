@@ -9,6 +9,7 @@ import {
   GridOption,
   Grouping,
   GroupTotalFormatters,
+  SliderOption,
   SortComparers,
   SortDirectionNumber,
 } from '@slickgrid-universal/common';
@@ -29,6 +30,7 @@ export class Example2 {
   commandQueue = [];
   sgb: SlickVanillaGridBundle;
   excelExportService: ExcelExportService;
+  loadingClass = '';
 
   constructor() {
     this.excelExportService = new ExcelExportService();
@@ -38,10 +40,10 @@ export class Example2 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(NB_ITEMS);
-    const gridContainerElm = document.querySelector(`.grid2`) as HTMLDivElement;
+    const gridContainerElm = document.querySelector<HTMLDivElement>('.grid2');
 
-    this._bindingEventService.bind(gridContainerElm, 'onbeforeexporttoexcel', () => console.log('onBeforeExportToExcel'));
-    this._bindingEventService.bind(gridContainerElm, 'onafterexporttoexcel', () => console.log('onAfterExportToExcel'));
+    this._bindingEventService.bind(gridContainerElm, 'onbeforeexporttoexcel', () => this.loadingClass = 'mdi mdi-load mdi-spin-1s mdi-22px');
+    this._bindingEventService.bind(gridContainerElm, 'onafterexporttoexcel', () => this.loadingClass = '');
     this.sgb = new Slicker.GridBundle(gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
 
     // you could group by duration on page load (must be AFTER the DataView is created, so after GridBundle)
@@ -76,7 +78,11 @@ export class Example2 {
         id: 'duration', name: 'Duration', field: 'duration',
         minWidth: 50, width: 60,
         filterable: true,
-        filter: { model: Filters.slider, operator: '>=' },
+        filter: {
+          model: Filters.slider,
+          operator: '>=',
+          filterOptions: { hideSliderNumber: true, enableSliderTrackColoring: true } as SliderOption
+        },
         sortable: true,
         type: FieldType.number,
         groupTotalsFormatter: GroupTotalFormatters.sumTotals,
@@ -112,22 +118,39 @@ export class Example2 {
         filter: { model: Filters.compoundDate },
         sortable: true,
         type: FieldType.dateIso,
+        outputType: FieldType.dateIso,
         formatter: Formatters.dateIso,
-        exportWithFormatter: true
       },
       {
         id: 'cost', name: 'Cost', field: 'cost',
-        minWidth: 70,
-        width: 80,
-        maxWidth: 120,
-        filterable: true,
+        minWidth: 70, width: 80,
+        sortable: true, filterable: true,
         filter: { model: Filters.compoundInputNumber },
         type: FieldType.number,
-        sortable: true,
-        exportWithFormatter: true,
-        formatter: Formatters.dollar,
-        groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollar,
-        params: { groupFormatterPrefix: '<b>Total</b>: ' /* , groupFormatterSuffix: ' USD' */ }
+        formatter: Formatters.currency,
+        groupTotalsFormatter: GroupTotalFormatters.sumTotalsCurrency,
+        params: { displayNegativeNumberWithParentheses: true, currencyPrefix: '€', groupFormatterCurrencyPrefix: '€', minDecimal: 2, maxDecimal: 4, groupFormatterPrefix: '<b>Total</b>: ' },
+        excelExportOptions: {
+          style: {
+            font: { outline: true, italic: true },
+            format: '€0.00##;[Red](€0.00##)',
+          },
+          width: 18
+        },
+        groupTotalsExcelExportOptions: {
+          style: {
+            alignment: { horizontal: 'center' },
+            font: { bold: true, color: 'FF005289', underline: 'single', fontName: 'Consolas', size: 10 },
+            fill: { type: 'pattern', patternType: 'solid', fgColor: 'FFE6F2F6' },
+            border: {
+              top: { color: 'FFa500ff', style: 'thick', },
+              left: { color: 'FFa500ff', style: 'medium', },
+              right: { color: 'FFa500ff', style: 'dotted', },
+              bottom: { color: 'FFa500ff', style: 'double', },
+            },
+            format: '"Total: "€0.00##;[Red]"Total: "(€0.00##)'
+          },
+        },
       },
       {
         id: 'effortDriven', name: 'Effort Driven',
@@ -164,7 +187,14 @@ export class Example2 {
         onColumnsChanged: (e, args) => console.log(e, args)
       },
       enableExcelExport: true,
-      excelExportOptions: { filename: 'my-export', sanitizeDataExport: true },
+      excelExportOptions: {
+        filename: 'my-export',
+        sanitizeDataExport: true,
+        columnHeaderStyle: {
+          font: { color: 'FFFFFFFF' },
+          fill: { type: 'pattern', patternType: 'solid', fgColor: 'FF4a6c91' }
+        }
+      },
       textExportOptions: { filename: 'my-export', sanitizeDataExport: true },
       registerExternalResources: [this.excelExportService, new TextExportService()],
       showCustomFooter: true, // display some metrics in the bottom custom footer
@@ -186,6 +216,7 @@ export class Example2 {
       const randomMonth = Math.floor(Math.random() * 11);
       const randomDay = Math.floor((Math.random() * 29));
       const randomPercent = Math.round(Math.random() * 100);
+      const randomCost = (i % 33 === 0) ? null : Math.round(Math.random() * 10000) / 100;
 
       tmpArray[i] = {
         id: 'id_' + i,
@@ -196,7 +227,7 @@ export class Example2 {
         percentCompleteNumber: randomPercent,
         start: new Date(randomYear, randomMonth, randomDay),
         finish: new Date(randomYear, (randomMonth + 1), randomDay),
-        cost: (i % 33 === 0) ? null : Math.round(Math.random() * 10000) / 100,
+        cost: i % 3 ? randomCost : randomCost !== null ? -randomCost : null,
         effortDriven: (i % 5 === 0)
       };
     }

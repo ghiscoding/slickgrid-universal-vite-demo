@@ -15,6 +15,7 @@ import {
   LongTextEditorOption,
   OnCompositeEditorChangeEventArgs,
   SlickNamespace,
+  SliderOption,
   SortComparers,
 
   // utilities
@@ -115,7 +116,7 @@ export class Example12 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(500);
-    this.gridContainerElm = document.querySelector<HTMLDivElement>(`.grid12`);
+    this.gridContainerElm = document.querySelector(`.grid12`) as HTMLDivElement;
 
     this.sgb = new Slicker.GridBundle(this.gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions });
     this.sgb.dataset = this.dataset;
@@ -137,7 +138,7 @@ export class Example12 {
   dispose() {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
-    this.gridContainerElm = null;
+    this.gridContainerElm.remove();
   }
 
   initializeGrid() {
@@ -187,6 +188,7 @@ export class Example12 {
           model: Editors.slider,
           massUpdate: true, minValue: 0, maxValue: 100,
         },
+        customTooltip: { position: 'center' }
       },
       // {
       //   id: 'percentComplete2', name: '% Complete', field: 'analysis.percentComplete', minWidth: 100,
@@ -235,7 +237,7 @@ export class Example12 {
         exportCustomFormatter: Formatters.dateUs,
         type: FieldType.date, outputType: FieldType.dateUs, saveOutputType: FieldType.dateUtc,
         filterable: true, filter: { model: Filters.compoundDate },
-        editor: { model: Editors.date, massUpdate: true, params: { hideClearButton: false } },
+        editor: { model: Editors.date, massUpdate: true, editorOptions: { hideClearButton: false } as SliderOption },
       },
       {
         id: 'completed', name: 'Completed', field: 'completed', width: 80, minWidth: 75, maxWidth: 100,

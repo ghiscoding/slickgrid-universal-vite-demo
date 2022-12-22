@@ -1,13 +1,14 @@
 import {
   BindingEventService,
   Column,
-  EditCommand,
   Editors,
   FieldType,
   Filters,
   Formatters,
   GridOption,
   OperatorType,
+  SliderOption,
+  SliderRangeOption,
 } from '@slickgrid-universal/common';
 import { SlickCustomTooltip } from '@slickgrid-universal/custom-tooltip-plugin';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
@@ -59,7 +60,7 @@ export class Example16 {
         },
         filterable: true,
         customTooltip: {
-          position: 'right-align', // defaults to "auto"
+          position: 'left-align', // defaults to "auto"
           // you can use the Custom Tooltip in 2 ways (synchronous or asynchronous)
           // example 1 (sync):
           // formatter: this.tooltipTaskFormatter,
@@ -144,18 +145,18 @@ export class Example16 {
         type: FieldType.number,
       },
       {
-        id: 'percentComplete', name: '% Complete', field: 'percentComplete', type: FieldType.number,
+        id: 'percentComplete', name: '% Complete', field: 'percentComplete', type: FieldType.number, minWidth: 130,
         editor: {
           model: Editors.slider,
           minValue: 0,
           maxValue: 100,
-          // params: { hideSliderNumber: true },
+          editorOptions: { enableSliderTrackColoring: true, hideSliderNumber: true } as SliderOption,
         },
         exportWithFormatter: false,
         formatter: Formatters.percentCompleteBar,
         sortable: true, filterable: true,
-        filter: { model: Filters.slider, operator: '>=' },
-        customTooltip: { useRegularTooltip: true, },
+        filter: { model: Filters.sliderRange, operator: '>=', filterOptions: { hideSliderNumbers: true } as SliderRangeOption },
+        customTooltip: { position: 'center', formatter: (row, cell, value) => `${value}%`, headerFormatter: null, headerRowFormatter: null },
       },
       {
         id: 'start', name: 'Start', field: 'start', sortable: true,
@@ -263,6 +264,10 @@ export class Example16 {
         id: 'action', name: 'Action', field: 'action', width: 70, minWidth: 70, maxWidth: 70,
         formatter: () => `<div class="button-style margin-auto" style="width: 35px; margin-top: -1px;"><span class="mdi mdi-chevron-down mdi-22px color-primary"></span></div>`,
         excludeFromExport: true,
+        // customTooltip: {
+        //   formatter: () => `Click to open Cell Menu`, // return empty so it won't show any pre-tooltip
+        //   offsetRight: 20,
+        // },
         cellMenu: {
           hideCloseButton: false,
           commandTitle: 'Commands',
