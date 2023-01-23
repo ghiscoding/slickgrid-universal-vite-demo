@@ -14,7 +14,7 @@ import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bu
 import './example06.scss';
 import { ExampleGridOptions } from './example-grid-options';
 
-export class Example6 {
+export default class Example6 {
   columnDefinitions: Column[];
   gridOptions: GridOption;
   datasetFlat: any[];

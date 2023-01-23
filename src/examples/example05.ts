@@ -19,7 +19,7 @@ import './example05.scss';
 
 const NB_ITEMS = 500;
 
-export class Example5 {
+export default class Example5 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;

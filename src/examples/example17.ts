@@ -3,13 +3,13 @@ import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bu
 import { ExampleGridOptions } from './example-grid-options';
 
 // use any of the Styling Theme
-import '../material-styles.scss';
+// import '../material-styles.scss';
 // import '../salesforce-styles.scss';
 import './example17.scss';
 
 const NB_ITEMS = 300;
 
-export class Example17 {
+export default class Example17 {
   gridOptions1: GridOption;
   gridOptions2: GridOption;
   columnDefinitions1: Column[];

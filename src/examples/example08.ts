@@ -13,7 +13,7 @@ import { ExampleGridOptions } from './example-grid-options';
 import '../salesforce-styles.scss';
 import './example08.scss';
 
-export class Example08 {
+export default class Example08 {
   columnDefinitions1: Column[];
   columnDefinitions2: Column[];
   gridOptions1: GridOption;

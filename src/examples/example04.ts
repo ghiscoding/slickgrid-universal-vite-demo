@@ -3,6 +3,7 @@ import {
   BindingEventService,
   Column,
   ColumnEditorDualInput,
+  EditCommand,
   Editors,
   FieldType,
   Filters,
@@ -48,13 +49,13 @@ const customEditableInputFormatter: Formatter<ReportItem> = (_row: number, _cell
   return item.title;
 };
 
-export class Example4 {
+export default class Example4 {
   private _bindingEventService: BindingEventService;
-  columnDefinitions: Column<ReportItem & { action: string; }>[];
+  columnDefinitions: Column<ReportItem & { action?: string; }>[];
   gridOptions: GridOption;
   dataset: any[];
   dataViewObj: SlickDataView;
-  commandQueue = [];
+  commandQueue: EditCommand[] = [];
   frozenColumnCount = 2;
   frozenRowCount = 3;
   isFrozenBottom = false;
@@ -485,8 +486,8 @@ export class Example4 {
   }
 
   setFrozenColumns(frozenCols: number) {
-    this.sgb?.slickGrid.setOptions({ frozenColumn: frozenCols, alwaysShowVerticalScroll: false });
-    this.gridOptions = this.sgb?.slickGrid.getOptions();
+    this.sgb?.slickGrid?.setOptions({ frozenColumn: frozenCols, alwaysShowVerticalScroll: false });
+    this.gridOptions = this.sgb?.slickGrid?.getOptions() ?? {};
   }
 
   /** toggle dynamically, through slickgrid "setOptions()" the top/bottom pinned location */

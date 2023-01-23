@@ -21,7 +21,7 @@ import './example10.scss';
 const defaultPageSize = 20;
 const GRAPHQL_QUERY_DATASET_NAME = 'users';
 
-export class Example10 {
+export default class Example10 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;

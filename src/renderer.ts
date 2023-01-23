@@ -40,7 +40,7 @@ export class Renderer {
     return className;
   }
 
-  loadView(viewModule: any) {
+  loadView(viewModule: string) {
     const bindedView = this.parseTemplate(viewModule);
     this.render(bindedView);
   }

@@ -38,7 +38,7 @@ const historicSparklineFormatter: Formatter = (_row: number, _cell: number, _val
   return svgElem.outerHTML;
 };
 
-export class Example34 {
+export default class Example34 {
   title = 'Example 34: Real-Time Stock Trading';
   subTitle = `Simulate a stock trading platform with lot of price changes
   <ul>

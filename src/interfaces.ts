@@ -2,7 +2,8 @@ export interface Route {
   route: string;
   name?: string;
   title?: string;
-  moduleId?: string;
+  view?: string;
+  viewModel?: any;
   redirect?: string;
 }
 

@@ -16,7 +16,7 @@ import { TranslateService } from '../translate.service';
 import { ExampleGridOptions } from './example-grid-options';
 import './example07.scss';
 
-export class Example7 {
+export default class Example7 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;

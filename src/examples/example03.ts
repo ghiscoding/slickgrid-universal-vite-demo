@@ -2,6 +2,7 @@ import {
   Aggregators,
   BindingEventService,
   Column,
+  EditCommand,
   Editors,
   FieldType,
   FileType,
@@ -35,12 +36,12 @@ interface ReportItem {
   effortDriven: boolean;
 }
 
-export class Example3 {
+export default class Example3 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column<ReportItem & { action: string; }>[];
   gridOptions: GridOption;
   dataset: any[];
-  editCommandQueue = [];
+  editCommandQueue: EditCommand[] = [];
   excelExportService: ExcelExportService;
   sgb: SlickVanillaGridBundle;
   durationOrderByCount = false;

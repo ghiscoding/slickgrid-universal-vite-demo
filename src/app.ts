@@ -1,22 +1,7 @@
 import { AppRouting } from './app-routing';
 import { Renderer } from './renderer';
 import { RouterConfig } from './interfaces';
-// import './examples/example01';
-// import './examples/example02';
-// import './examples/example03';
-// import './examples/example04';
-// import './examples/example05';
-// import './examples/example06';
-// import './examples/example07';
-// import './examples/example08';
-// import './examples/example09';
-// import './examples/example10';
-// import './examples/example11';
-// import './examples/example12';
-// import './examples/example13';
-// import './examples/example14';
-// import './examples/example15';
-// import './examples/example16';
+const pageLayoutGlobs = import.meta.glob('./examples/**/*.html', { as: 'raw', eager: true });
 
 interface ElementEventListener {
   element: Element;
@@ -26,6 +11,7 @@ interface ElementEventListener {
 
 export class App {
   private _boundedEventWithListeners: ElementEventListener[] = [];
+  private _appInitialized = false;
   documentTitle = 'Slickgrid-Universal';
   defaultRouteName: string;
   stateBangChar: string;
@@ -42,15 +28,8 @@ export class App {
   constructor() {
     this.appRouting = new AppRouting(this.routerConfig);
     this.stateBangChar = this.routerConfig.pushState ? '/' : '#/';
-    this.defaultRouteName = this.routerConfig.routes.find((map) => map.redirect)?.redirect || '';
+    this.defaultRouteName = this.routerConfig.routes.find((map) => map.route === '' || map.route === '**')?.redirect || '';
     this.navbarHamburgerToggle();
-    // this.lazyLoadAllRoutes();
-  }
-
-  async lazyLoadAllRoutes() {
-    for (const route of this.appRouting.getRoutes()) {
-      await import(/* @vite-ignore */ route);
-    }
   }
 
   attached() {
@@ -87,7 +66,7 @@ export class App {
   }
 
   addElementEventListener(element: Element, eventName: string, listener: EventListenerOrEventListenerObject) {
-    element.addEventListener(eventName, listener);
+    element.addEventListener(eventName, listener, { passive: true});
     this._boundedEventWithListeners.push({ element, eventName, listener });
   }
 
@@ -127,10 +106,9 @@ export class App {
       if (!mapRoute && this.defaultRouteName !== '') {
         this.loadRoute(this.defaultRouteName);
         return;
-      } else if (mapRoute) {
+      } else if (mapRoute?.view) {
         this.renderer.render('Loading...');
-        const vmModule = await import(/* @vite-ignore */ `${mapRoute.moduleId}.ts`);
-        const viewModel = this.renderer.loadViewModel(vmModule);
+        const viewModel = this.renderer.loadViewModel(mapRoute.viewModel);
         if (viewModel?.dispose) {
           window.onunload = () => {
             viewModel.dispose; // dispose when leaving SPA
@@ -139,13 +117,16 @@ export class App {
         }
 
         // then load the new View
-        const htmlModule = await import(/* @vite-ignore */ `${mapRoute.moduleId}.html?raw`);
-        if (htmlModule?.default) {
-          this.renderer.loadView(htmlModule.default);
+        const htmlModule = pageLayoutGlobs[mapRoute.view];
+
+        if (htmlModule) {
+          this.renderer.loadView(htmlModule);
           if (viewModel?.attached && this.renderer.className) {
             this.viewModelObj[this.renderer.className] = viewModel;
             viewModel.attached();
-            this.dropdownToggle(); // rebind bulma dropdown toggle event handlers
+            if (!this._appInitialized) {
+              this.dropdownToggle(); // bind bulma dropdown toggle event handlers
+            }
           }
 
           // change browser's history state & title
@@ -156,6 +137,7 @@ export class App {
         }
       }
     }
+    this._appInitialized = true;
   }
 
   /** bind bulma all dropdowns toggle event handlers */
@@ -181,27 +163,27 @@ export class App {
 
   /** Add event listener for the navbar hamburger menu toggle when menu shows up on mobile */
   navbarHamburgerToggle() {
-    document.addEventListener('DOMContentLoaded', this.handleNavbarHamburgerToggle);
+    document.addEventListener('DOMContentLoaded', this.handleNavbarHamburgerToggle, { passive: true });
   }
 
   handleNavbarHamburgerToggle() {
     // Get all "navbar-burger" elements
-    const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+    const navbarBurgerElms = document.querySelectorAll<HTMLAnchorElement>('.navbar-burger');
 
     // Check if there are any navbar burgers
-    if ($navbarBurgers.length > 0) {
+    if (navbarBurgerElms.length > 0) {
       // Add a click event on each of them
-      $navbarBurgers.forEach(el => {
+      navbarBurgerElms.forEach(el => {
         el.addEventListener('click', () => {
 
           // Get the target from the "data-target" attribute
-          const target = el.dataset.target;
+          const target = el.dataset.target as any;
           const $target = document.getElementById(target) as HTMLDivElement;
 
           // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
           el.classList.toggle('is-active');
           $target.classList.toggle('is-active');
-        });
+        }, { passive: true });
       });
     }
   }

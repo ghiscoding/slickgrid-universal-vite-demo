@@ -11,7 +11,7 @@ import './example15.scss';
 
 const defaultPageSize = 20;
 
-export class Example15 {
+export default class Example15 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;

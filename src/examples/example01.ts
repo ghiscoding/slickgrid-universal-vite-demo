@@ -9,7 +9,7 @@ import './example01.scss';
 
 const NB_ITEMS = 995;
 
-export class Example1 {
+export default class Example1 {
   gridOptions1!: GridOption;
   gridOptions2!: GridOption;
   columnDefinitions1!: Column[];

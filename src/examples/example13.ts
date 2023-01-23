@@ -7,13 +7,13 @@ import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 
 import { ExampleGridOptions } from './example-grid-options';
-import '../material-styles.scss';
+// import '../material-styles.scss';
 import './example13.scss';
 
 let columns1WithHighlightingById = {};
 let columns2WithHighlightingById = {};
 
-export class Example13 {
+export default class Example13 {
   private _bindingEventService: BindingEventService;
   columnDefinitions1: Column[];
   columnDefinitions2: Column[];

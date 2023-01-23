@@ -22,7 +22,7 @@ import './example02.scss';
 
 const NB_ITEMS = 500;
 
-export class Example2 {
+export default class Example2 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;
@@ -37,10 +37,10 @@ export class Example2 {
     this._bindingEventService = new BindingEventService();
   }
 
-  attached() {
+  async attached() {
     this.initializeGrid();
     this.dataset = this.loadData(NB_ITEMS);
-    const gridContainerElm = document.querySelector<HTMLDivElement>('.grid2');
+    const gridContainerElm = document.querySelector<HTMLDivElement>('.grid2') as HTMLDivElement;
 
     this._bindingEventService.bind(gridContainerElm, 'onbeforeexporttoexcel', () => this.loadingClass = 'mdi mdi-load mdi-spin-1s mdi-22px');
     this._bindingEventService.bind(gridContainerElm, 'onafterexporttoexcel', () => this.loadingClass = '');
@@ -48,6 +48,9 @@ export class Example2 {
 
     // you could group by duration on page load (must be AFTER the DataView is created, so after GridBundle)
     // this.groupByDuration();
+
+    // override CSS template to be Material Design
+    // await import('@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-material.scss');
   }
 
   dispose() {

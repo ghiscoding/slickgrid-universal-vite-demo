@@ -1,6 +1,7 @@
 import {
   BindingEventService,
   Column,
+  EditCommand,
   Editors,
   FieldType,
   Filters,
@@ -18,7 +19,7 @@ import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bu
 import { ExampleGridOptions } from './example-grid-options';
 import './example16.scss';
 
-export class Example16 {
+export default class Example16 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;
@@ -156,7 +157,7 @@ export class Example16 {
         formatter: Formatters.percentCompleteBar,
         sortable: true, filterable: true,
         filter: { model: Filters.sliderRange, operator: '>=', filterOptions: { hideSliderNumbers: true } as SliderRangeOption },
-        customTooltip: { position: 'center', formatter: (row, cell, value) => `${value}%`, headerFormatter: null, headerRowFormatter: null },
+        customTooltip: { position: 'center', formatter: (_row, _cell, value) => `${value}%`, headerFormatter: null as any, headerRowFormatter: null as any },
       },
       {
         id: 'start', name: 'Start', field: 'start', sortable: true,

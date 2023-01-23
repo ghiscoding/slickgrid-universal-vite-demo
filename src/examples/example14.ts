@@ -78,7 +78,7 @@ const customEditableInputFormatter: Formatter = (_row, _cell, value, columnDef, 
   return isEditableLine ? `<div class="editing-field">${value}</div>` : value;
 };
 
-export class Example14 {
+export default class Example14 {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;

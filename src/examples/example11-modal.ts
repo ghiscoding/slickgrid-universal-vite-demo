@@ -13,7 +13,7 @@ import { ExampleGridOptions } from './example-grid-options';
 import '../salesforce-styles.scss';
 import './example11-modal.scss';
 
-export class Example11Modal {
+export default class Example11Modal {
   private _bindingEventService: BindingEventService;
   columnDefinitions: Column[];
   gridOptions: GridOption;
