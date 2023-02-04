@@ -2,30 +2,32 @@ import {
   AutocompleterOption,
   BindingEventService,
   Column,
+  EditCommand,
   Editors,
   EventNamingStyle,
   FieldType,
   Filters,
+  FlatpickrOption,
   Formatter,
   Formatters,
   GridOption,
   LongTextEditorOption,
   SlickNamespace,
+  SliderRangeOption,
   SortComparers,
 
   // utilities
   formatNumber,
   Utilities,
-  EditCommand,
-  FlatpickrOption,
+  GridStateChange,
 } from '@slickgrid-universal/common';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
-import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
+import { Slicker, SlickerGridInstance, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 
 import { ExampleGridOptions } from './example-grid-options';
 import './example14.scss';
 
-const NB_ITEMS = 5000;
+const NB_ITEMS = 400;
 
 // using external SlickGrid JS libraries
 declare const Slick: SlickNamespace;
@@ -110,7 +112,7 @@ export default class Example14 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(NB_ITEMS);
-    this.gridContainerElm = document.querySelector('.grid14') as HTMLDivElement;
+    this.gridContainerElm = document.querySelector(`.grid14`) as HTMLDivElement;
 
     this.sgb = new Slicker.GridBundle(this.gridContainerElm, Utilities.deepCopy(this.columnDefinitions), { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
 
@@ -121,6 +123,8 @@ export default class Example14 {
     this._bindingEventService.bind(this.gridContainerElm, 'onpaginationchanged', this.handlePaginationChanged.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'onbeforeresizebycontent', this.showSpinner.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'onafterresizebycontent', this.hideSpinner.bind(this));
+    this._bindingEventService.bind(this.gridContainerElm, 'onselectedrowidschanged', this.handleOnSelectedRowIdsChanged.bind(this));
+    this._bindingEventService.bind(this.gridContainerElm, 'ongridstatechanged', this.handleOnGridStateChanged.bind(this));
   }
 
   dispose() {
@@ -173,10 +177,18 @@ export default class Example14 {
         formatter: Formatters.dollar,
       },
       {
-        id: 'percentComplete', name: '% Complete', field: 'percentComplete', minWidth: 100,
+        id: 'percentComplete', name: '% Complete', field: 'percentComplete', minWidth: 150,
         type: FieldType.number,
         sortable: true, filterable: true, columnGroup: 'Analysis',
-        filter: { model: Filters.compoundSlider, operator: '>=' },
+        filter: {
+          model: Filters.sliderRange,
+          operator: '>=',
+          // searchTerms: [15, 78],
+          filterOptions: {
+            enableSliderTrackColoring: true,
+            hideSliderNumbers: false,
+          } as SliderRangeOption,
+        },
         editor: {
           model: Editors.slider,
           minValue: 0, maxValue: 100,
@@ -332,7 +344,7 @@ export default class Example14 {
               },
               action: (_event, args) => {
                 const dataContext = args.dataContext;
-                if (confirm(`Do you really want to delete row (${(args.row || 0) + 1}) with "${dataContext.title}"`)) {
+                if (confirm(`Do you really want to delete row (${args.row || 0 + 1}) with "${dataContext.title}"`)) {
                   this.slickerGridInstance?.gridService.deleteItemById(dataContext.id);
                 }
               }
@@ -352,8 +364,14 @@ export default class Example14 {
       autoResize: {
         container: '.grid-container',
         resizeDetection: 'container',
+        minHeight: 250
       },
       enableAutoResize: true,
+      enablePagination: true,
+      pagination: {
+        pageSize: 10,
+        pageSizes: [10, 200, 500, 5000]
+      },
 
       // resizing by cell content is opt-in
       // we first need to disable the 2 default flags to autoFit/autosize
@@ -374,6 +392,7 @@ export default class Example14 {
       enableRowSelection: true,
       enableCheckboxSelector: true,
       checkboxSelector: {
+        applySelectOnAllPages: true, // already defaults to true
         hideInFilterHeaderRow: false,
         hideInColumnTitleRow: true,
       },
@@ -465,6 +484,12 @@ export default class Example14 {
     return tmpArray;
   }
 
+  handleOnGridStateChanged(event) {
+    // console.log('handleOnGridStateChanged', event?.detail ?? '')
+    const gridStateChanges: GridStateChange = event?.detail;
+    console.log('Grid State changed::', gridStateChanges);
+  }
+
   handleValidationError(event) {
     console.log('handleValidationError', event.detail);
     const args = event.detail && event.detail.args;
@@ -536,6 +561,11 @@ export default class Example14 {
     this.classNewResizeButton = 'button is-small is-selected is-primary';
   }
 
+  handleOnSelectedRowIdsChanged(event) {
+    const args = event?.detail?.args ?? {};
+    console.log('Selected Ids:', args.selectedRowIds);
+  }
+
   toggleGridEditReadonly() {
     // first need undo all edits
     this.undoAllEdits();
@@ -605,6 +635,19 @@ export default class Example14 {
     this.removeAllUnsavedStylingFromCell();
     this.editQueue = [];
     this.editedItems = {};
+  }
+
+  // change row selection dynamically and apply it to the DataView and the Grid UI
+  setSelectedRowIds() {
+    // change row selection even across multiple pages via DataView
+    this.sgb.dataView?.setSelectedIds([3, 4, 11]);
+
+    // you can also provide optional options (all defaults to true)
+    // this.sgb.dataView?.setSelectedIds([4, 5, 8, 10], {
+    //   isRowBeingAdded: true,
+    //   shouldTriggerEvent: true,
+    //   applyGridRowSelection: true
+    // });
   }
 
   undoLastEdit(showLastEditor = false) {
