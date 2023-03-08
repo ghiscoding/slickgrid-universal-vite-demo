@@ -4,6 +4,7 @@ import { defineConfig } from 'vite';
 dns.setDefaultResultOrder('verbatim');
 
 export default defineConfig({
+  base: '/slickgrid-universal-vite-demo/',
   build: {
     chunkSizeWarningLimit: 6000,
   },
