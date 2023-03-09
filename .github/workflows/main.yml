@@ -42,7 +42,7 @@ jobs:
       - name: Install npm/yarn dependencies
         run: yarn install
 
-      - name: Bootstrap 5 Prod Build for GitHub demo website
+      - name: Prod Build for GitHub demo website
         run: yarn build
 
       - name: Deploy to gh-pages
