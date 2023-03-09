@@ -27,6 +27,7 @@ import { VanillaForceGridBundle, Slicker } from '@slickgrid-universal/vanilla-fo
 import { CompositeEditor, SlickCompositeEditorComponent } from '@slickgrid-universal/composite-editor-component';
 
 import { ExampleGridOptions } from './example-grid-options';
+import countriesJson from './data/countries.json?raw';
 import './example12.scss';
 
 // using external SlickGrid JS libraries
@@ -87,7 +88,7 @@ export default class Example12 {
   gridOptions: GridOption;
   dataset: any[] = [];
   isGridEditable = true;
-  editQueue: Array<{ item, columns: Column[], editCommand }>  = [];
+  editQueue: Array<{ item, columns: Column[], editCommand }> = [];
   editedItems = {};
   isCompositeDisabled = false;
   isMassSelectionDisabled = true;
@@ -116,11 +117,11 @@ export default class Example12 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(500);
-    this.gridContainerElm = document.querySelector(`.grid12`) as HTMLDivElement;
+    this.gridContainerElm = document.querySelector<HTMLDivElement>(`.grid12`) as HTMLDivElement;
 
     this.sgb = new Slicker.GridBundle(this.gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions });
     this.sgb.dataset = this.dataset;
-    // this.sgb.slickGrid?.setActiveCell(0, 0);
+    // this.sgb.slickGrid.setActiveCell(0, 0);
 
     // bind any of the grid events
     this._bindingEventService.bind(this.gridContainerElm, 'onvalidationerror', this.handleValidationError.bind(this));
@@ -133,6 +134,7 @@ export default class Example12 {
     this._bindingEventService.bind(this.gridContainerElm, 'oncompositeeditorchange', this.handleOnCompositeEditorChange.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'onpaginationchanged', this.handleReRenderUnsavedStyling.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'onfilterchanged', this.handleReRenderUnsavedStyling.bind(this));
+    this._bindingEventService.bind(this.gridContainerElm, 'onselectedrowidschanged', this.handleOnSelectedRowIdsChanged.bind(this));
   }
 
   dispose() {
@@ -219,8 +221,8 @@ export default class Example12 {
         id: 'complexity', name: 'Complexity', field: 'complexity', minWidth: 100,
         type: FieldType.number,
         sortable: true, filterable: true, columnGroup: 'Analysis',
-        formatter: (_row, _cell, value) => this.complexityLevelList[value].label,
-        exportCustomFormatter: (_row, _cell, value) => this.complexityLevelList[value].label,
+        formatter: (_row, _cell, value) => this.complexityLevelList[value]?.label,
+        exportCustomFormatter: (_row, _cell, value) => this.complexityLevelList[value]?.label,
         filter: {
           model: Filters.multipleSelect,
           collection: this.complexityLevelList
@@ -339,7 +341,7 @@ export default class Example12 {
             minLength: 0,
             showOnFocus: false,
             fetch: (searchText, updateCallback) => {
-              const countries: any[] = require('./data/countries.json');
+              const countries: any[] = JSON.parse(countriesJson);
               const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
               updateCallback(foundCountries.map(item => ({ label: item.name, value: item.code, })));
             },
@@ -433,8 +435,8 @@ export default class Example12 {
       headerRowHeight: 35,
       enableCheckboxSelector: true,
       enableRowSelection: true,
-      multiSelect: false,
       checkboxSelector: {
+        applySelectOnAllPages: true,
         hideInFilterHeaderRow: false,
         hideInColumnTitleRow: true,
       },
@@ -621,6 +623,12 @@ export default class Example12 {
     if (Array.isArray(gridState?.rowSelection.dataContextIds)) {
       this.isMassSelectionDisabled = gridState.rowSelection.dataContextIds.length === 0;
     }
+  }
+
+  handleOnSelectedRowIdsChanged(event) {
+    const args = event?.detail?.args;
+    // const sortedSelectedIds = args.filteredIds.sort((a, b) => a - b);
+    console.log('sortedSelectedIds', args.filteredIds.length, args.selectedRowIds.length);
   }
 
   toggleGridEditReadonly() {

@@ -21,7 +21,7 @@ import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 
 import { ExampleGridOptions } from './example-grid-options';
-import './example03.scss';
+import './example03.scss?inline';
 
 // using external SlickGrid JS libraries
 declare const Slick: SlickNamespace;
@@ -385,7 +385,7 @@ export default class Example3 {
   }
 
   clearGrouping() {
-    this.draggableGroupingPlugin.clearDroppedGroups();
+    this.draggableGroupingPlugin?.clearDroppedGroups();
     this.sgb?.slickGrid?.invalidate(); // invalidate all rows and re-render
   }
 

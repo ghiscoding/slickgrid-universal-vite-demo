@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import sparkline from '@fnando/sparkline';
+import * as sparkline from '@fnando/sparkline';
 import {
   Aggregators,
   Column,
@@ -11,14 +11,15 @@ import {
   GridOption,
   GroupTotalFormatters,
 } from '@slickgrid-universal/common';
-import './example18.scss';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 import { ExampleGridOptions } from './example-grid-options';
+import './example18.scss';
+import '../material-styles.scss';
 
 const NB_ITEMS = 200;
 
 const currencyFormatter: Formatter = (_cell: number, _row: number, value: string) =>
-  `<img src="https://flags.fmcdn.net/data/flags/mini/${value.substr(0, 2).toLowerCase()}.png" width="20"/> ${value}`;
+  `<img src="https://flags.fmcdn.net/data/flags/mini/${value.substring(0, 2).toLowerCase()}.png" width="20"/> ${value}`;
 
 const priceFormatter: Formatter = (_cell: number, _row: number, value: number, _col: Column, dataContext: any) => {
   const direction = dataContext.priceChange >= 0 ? 'up' : 'down';
@@ -34,21 +35,11 @@ const historicSparklineFormatter: Formatter = (_row: number, _cell: number, _val
   svgElem.setAttributeNS(null, 'height', '30');
   svgElem.setAttributeNS(null, 'stroke-width', '2');
   svgElem.classList.add('sparkline');
-  sparkline(svgElem, dataContext.historic, { interactive: true });
+  sparkline.sparkline(svgElem, dataContext.historic, { interactive: true });
   return svgElem.outerHTML;
 };
 
-export default class Example34 {
-  title = 'Example 34: Real-Time Stock Trading';
-  subTitle = `Simulate a stock trading platform with lot of price changes
-  <ul>
-    <li>you can start/stop the simulation</li>
-    <li>optionally change random numbers, between 0 and 10 symbols, per cycle (higher numbers means more changes)</li>
-    <li>optionally change the simulation changes refresh rate in ms (lower number means more changes).</li>
-    <li>you can Group by 1 of these columns: Currency, Market or Type</li>
-    <li>to show SlickGrid HUGE PERF., do the following: (1) lower Changes Rate (2) increase both Changes per Cycle and (3) lower Highlight Duration
-  </ul>`;
-
+export default class Example18 {
   columnDefinitions: Column[] = [];
   dataset: any[] = [];
   gridOptions!: GridOption;
@@ -73,11 +64,13 @@ export default class Example34 {
     setTimeout(() => {
       this.startSimulation();
     }, this.refreshRate);
+    document.body.classList.add('material-theme');
   }
 
   dispose() {
     this.stopSimulation();
     this.sgb?.dispose();
+    document.body.classList.remove('material-theme');
   }
 
   /* Define grid Options and Columns */
@@ -206,14 +199,14 @@ export default class Example34 {
       const now = new Date();
       now.setHours(9, 30, 0);
       const currency = (Math.floor(Math.random() * 10)) % 2 ? 'CAD' : 'USD';
-      const company = faker.company.companyName();
+      const company = faker.company.name();
 
       datasetTmp[i] = {
         id: i,
         currency,
         trsnType: (Math.round(Math.random() * 100)) % 2 ? 'Buy' : 'Sell',
         company,
-        symbol: currency === 'CAD' ? company.substr(0, 3).toUpperCase() + '.TO' : company.substr(0, 4).toUpperCase(),
+        symbol: currency === 'CAD' ? company.substring(0, 3).toUpperCase() + '.TO' : company.substring(0, 4).toUpperCase(),
         market: currency === 'CAD' ? 'TSX' : price > 200 ? 'Nasdaq' : 'S&P 500',
         duration: (i % 33 === 0) ? null : Math.random() * 100 + '',
         percentCompleteNumber: randomPercent,

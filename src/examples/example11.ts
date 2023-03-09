@@ -27,6 +27,7 @@ import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 import moment from 'moment-mini';
 
+import countriesJson from './data/countries.json?raw';
 import { ExampleGridOptions } from './example-grid-options';
 import { loadComponent } from './utilities';
 import './example11.scss';
@@ -243,7 +244,7 @@ export default class Example11 {
           editorOptions: {
             minLength: 1,
             fetch: (searchText, updateCallback) => {
-              const countries: any[] = require('./data/countries.json');
+              const countries: any[] = JSON.parse(countriesJson);
               const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
               updateCallback(foundCountries.map(item => ({ label: item.name, value: item.code, })));
             },
@@ -470,7 +471,7 @@ export default class Example11 {
   }
 
   remoteCallbackFn(args: { item: any, selectedIds: string[], updateType: 'selection' | 'mass' }) {
-    const fields: Array<{ fieldName: string; value: any;}> = [];
+    const fields: Array<{ fieldName: string; value: any; }> = [];
     for (const key in args.item) {
       if (args.item.hasOwnProperty(key)) {
         fields.push({ fieldName: key, value: args.item[key] });
@@ -675,6 +676,7 @@ export default class Example11 {
     this.sgb.gridStateService.resetToOriginalColumns();
     this.sgb.filterService.clearFilters();
     this.sgb.sortService.clearSorting();
+    this.sgb.gridService.clearPinning();
   }
 
   async updateView(event: DOMEvent<HTMLInputElement>) {

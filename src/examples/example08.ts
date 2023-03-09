@@ -183,7 +183,7 @@ export default class Example08 {
       }
       const selectOption = document.createElement('option') as HTMLOptionElement;
       selectOption.value = `${columnDef.id}`;
-      // selectOption.label = columnDef.name;
+      selectOption.label = columnDef.name as string;
       columnSelect.appendChild(selectOption);
     }
     this.grid2SearchSelectedColumn = this.columnDefinitions2.find(col => col.id === 'title') as Column;

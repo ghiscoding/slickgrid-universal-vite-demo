@@ -22,8 +22,9 @@ import {
   GridStateChange,
 } from '@slickgrid-universal/common';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
-import { Slicker, SlickerGridInstance, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
+import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 
+import countriesJson from './data/countries.json?raw';
 import { ExampleGridOptions } from './example-grid-options';
 import './example14.scss';
 
@@ -307,7 +308,7 @@ export default class Example14 {
             minLength: 0,
             showOnFocus: false,
             fetch: (searchText, updateCallback) => {
-              const countries: any[] = require('./data/countries.json');
+              const countries: any[] = JSON.parse(countriesJson);
               const foundCountries = countries.filter((country) => country.name.toLowerCase().includes(searchText.toLowerCase()));
               updateCallback(foundCountries.map(item => ({ label: item.name, value: item.code, })));
             },

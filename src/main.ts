@@ -1,11 +1,3 @@
-// import './style.css'
-
-// const app = document.querySelector<HTMLDivElement>('#app')!
-
-// app.innerHTML = `
-//   <h1>Hello Vite!</h1>
-//   <a href="https://vitejs.dev/guide/features.html" target="_blank">Documentation</a>
-// `
 import 'jquery';
 import './jQuery'; // define jQuery on the global window to make it available in Vite since @rollup/plugin-inject causes conflict with SASS variables prefixed with $var
 

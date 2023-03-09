@@ -23,7 +23,7 @@ export class App {
   routerConfig: RouterConfig = {
     pushState: false,
     routes: []
-  }
+  };
 
   constructor() {
     this.appRouting = new AppRouting(this.routerConfig);
@@ -66,7 +66,7 @@ export class App {
   }
 
   addElementEventListener(element: Element, eventName: string, listener: EventListenerOrEventListenerObject) {
-    element.addEventListener(eventName, listener, { passive: true});
+    element.addEventListener(eventName, listener, { passive: true });
     this._boundedEventWithListeners.push({ element, eventName, listener });
   }
 

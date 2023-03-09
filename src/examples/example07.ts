@@ -10,11 +10,12 @@ import {
 } from '@slickgrid-universal/common';
 import { ExcelExportService } from '@slickgrid-universal/excel-export';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-import * as DOMPurify from 'dompurify';
+import DOMPurify from 'dompurify';
 
 import { TranslateService } from '../translate.service';
 import { ExampleGridOptions } from './example-grid-options';
 import './example07.scss';
+import '../material-styles.scss';
 
 export default class Example7 {
   private _bindingEventService: BindingEventService;
@@ -47,18 +48,20 @@ export default class Example7 {
     this.isSortingEnabled = true;
   }
 
-  attached() {
+  async attached() {
     this.initializeGrid();
     this.dataset = this.loadData(500);
     const gridContainerElm = document.querySelector(`.grid7`) as HTMLDivElement;
     this._bindingEventService.bind(gridContainerElm, 'oncellchange', this.handleOnCellChange.bind(this));
     this._bindingEventService.bind(gridContainerElm, 'onvalidationerror', this.handleValidationError.bind(this));
     this.sgb = new Slicker.GridBundle(gridContainerElm, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
+    document.body.classList.add('material-theme');
   }
 
   dispose() {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
+    document.body.classList.remove('material-theme');
   }
 
   initializeGrid() {
@@ -528,9 +531,9 @@ export default class Example7 {
     // you MUST use "getAllColumnDefinitions()" from the GridService, using this will be ALL columns including the 1st column that is created internally
     // for example if you use the Checkbox Selector (row selection), you MUST use the code below
     /*
-      const allColumns = this.sgb.gridService.getAllColumnDefinitions();
-      allColumns.push(newCol);
-      this.sgb.columnDefinitions = [...allColumns]; // (or use slice) reassign to column definitions for framework to do dirty checking
+      const allOriginalColumns = this.sgb.gridService.getAllColumnDefinitions();
+      allOriginalColumns.push(newCol);
+      this.sgb.columnDefinitions = [...allOriginalColumns]; // (or use slice) reassign to column definitions for framework to do dirty checking
     */
   }
 

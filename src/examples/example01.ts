@@ -1,6 +1,8 @@
 import { Column, ExtensionName, FieldType, Formatters, GridOption } from '@slickgrid-universal/common';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 import { ExampleGridOptions } from './example-grid-options';
+// import '@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.scss?inline';
+// import cssCode from '@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.scss?url';
 
 // use any of the Styling Theme
 // import '../material-styles.scss';
@@ -21,6 +23,9 @@ export default class Example1 {
   isGrid2WithPagination = true;
 
   attached() {
+    // override CSS template to be Material Design
+    // await import('@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.scss');
+
     this.defineGrids();
 
     // mock some data (different in each dataset)
