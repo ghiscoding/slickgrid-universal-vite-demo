@@ -5,7 +5,7 @@ dns.setDefaultResultOrder('verbatim');
 
 export default defineConfig(({ mode }) => {
   return {
-    base: mode === 'production' ? '/slickgrid-universal-vite-demo/' : './',
+    base: './',
     build: {
       chunkSizeWarningLimit: 6000,
       emptyOutDir: true,
