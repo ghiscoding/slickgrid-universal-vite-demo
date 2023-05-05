@@ -9,6 +9,11 @@ export default defineConfig(({ mode }) => {
     build: {
       chunkSizeWarningLimit: 6000,
       emptyOutDir: true,
+      rollupOptions: {
+        external: [
+          'flatpickr/dist/l10n/fr',
+        ],
+      },
     },
     optimizeDeps: {
       include: ['jquery'],
