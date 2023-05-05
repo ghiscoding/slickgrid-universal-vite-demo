@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       emptyOutDir: true,
       rollupOptions: {
         external: [
-          'flatpickr/dist/l10n/fr',
+          './node_modules/flatpickr/dist/l10n/fr',
         ],
       },
     },
