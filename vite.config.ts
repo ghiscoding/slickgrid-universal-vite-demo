@@ -15,9 +15,6 @@ export default defineConfig(({ mode }) => {
         ],
       },
     },
-    optimizeDeps: {
-      include: ['jquery'],
-    },
     preview: {
       port: 3000
     },
