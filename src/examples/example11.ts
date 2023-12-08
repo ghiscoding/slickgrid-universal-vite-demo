@@ -139,8 +139,7 @@ export default class Example11 {
       {
         id: 'title', name: 'Title', field: 'title', sortable: true, minWidth: 80,
         editor: { model: Editors.text, massUpdate: true, required: true, alwaysSaveOnEnterKey: true, validator: myCustomTitleValidator, },
-        filterable: true,
-        formatter: Formatters.multiple, params: { formatters: [Formatters.uppercase, Formatters.bold] },
+        filterable: true, cssClass: 'text-uppercase text-bold',
       },
       {
         id: 'duration', name: 'Duration', field: 'duration', sortable: true, filterable: true, minWidth: 80,
