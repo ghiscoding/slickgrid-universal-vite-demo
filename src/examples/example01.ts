@@ -1,4 +1,4 @@
-import { Column, ExtensionName, FieldType, Formatters, GridOption } from '@slickgrid-universal/common';
+import { type Column, ExtensionName, FieldType, Formatters, type GridOption } from '@slickgrid-universal/common';
 import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 import { ExampleGridOptions } from './example-grid-options';
 // import '@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-salesforce.scss?inline';
@@ -6,12 +6,11 @@ import { ExampleGridOptions } from './example-grid-options';
 
 // use any of the Styling Theme
 // import '../material-styles.scss';
-// import '../salesforce-styles.scss';
 import './example01.scss';
 
 const NB_ITEMS = 995;
 
-export default class Example1 {
+export default class Example01 {
   gridOptions1!: GridOption;
   gridOptions2!: GridOption;
   columnDefinitions1!: Column[];
@@ -79,7 +78,7 @@ export default class Example1 {
             { command: '', divider: true, positionOrder: 98 },
             {
               // we can also have multiple nested sub-menus
-              command: 'export', title: 'Exports', positionOrder: 99,
+              command: 'export', title: 'Exports', iconCssClass: 'mdi mdi-download', positionOrder: 99,
               commandItems: [
                 { command: 'exports-txt', title: 'Text (tab delimited)' },
                 {
@@ -92,7 +91,7 @@ export default class Example1 {
               ]
             },
             {
-              command: 'feedback', title: 'Feedback', positionOrder: 100,
+              command: 'feedback', title: 'Feedback', iconCssClass: 'mdi mdi-information-outline', positionOrder: 100,
               commandItems: [
                 { command: 'request-update', title: 'Request update from supplier', iconCssClass: 'mdi mdi-star', tooltip: 'this will automatically send an alert to the shipping team to contact the user for an update' },
                 'divider',
