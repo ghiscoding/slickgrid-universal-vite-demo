@@ -1,7 +1,7 @@
 import { AppRouting } from './app-routing';
 import { Renderer } from './renderer';
 import { RouterConfig } from './interfaces';
-const pageLayoutGlobs = import.meta.glob('./examples/**/*.html', { as: 'raw', eager: true });
+const pageLayoutGlobs = import.meta.glob('./examples/**/*.html', { query: '?raw', eager: true, import: 'default' });
 
 interface ElementEventListener {
   element: Element;
