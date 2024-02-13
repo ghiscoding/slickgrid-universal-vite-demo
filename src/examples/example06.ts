@@ -243,7 +243,7 @@ export default class Example06 {
     const exportIndentationLeadingChar = '.';
 
     value = value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-    const spacer = `<span class="display-inline-block width-${(15 * treeLevel)}px"></span>`;
+    const spacer = `<span style="display:inline-block; width:${(15 * treeLevel)}px;"></span>`;
     const indentSpacer = addWhiteSpaces(5 * treeLevel);
 
     if (data[idx + 1]?.[treeLevelPropName] > data[idx][treeLevelPropName] || data[idx]['__hasChildren']) {
