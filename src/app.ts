@@ -117,7 +117,7 @@ export class App {
         }
 
         // then load the new View
-        const htmlModule = pageLayoutGlobs[mapRoute.view];
+        const htmlModule = pageLayoutGlobs[mapRoute.view] as string;
 
         if (htmlModule) {
           this.renderer.loadView(htmlModule);
