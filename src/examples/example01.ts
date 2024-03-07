@@ -11,6 +11,7 @@ import './example01.scss';
 const NB_ITEMS = 995;
 
 export default class Example01 {
+  private _darkModeGrid1 = false;
   gridOptions1!: GridOption;
   gridOptions2!: GridOption;
   columnDefinitions1!: Column[];
@@ -44,6 +45,10 @@ export default class Example01 {
     this.sgb2?.dispose();
   }
 
+  isBrowserDarkModeEnabled() {
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
+  }
+
   /* Define grid Options and Columns */
   defineGrids() {
     this.columnDefinitions1 = [
@@ -54,8 +59,10 @@ export default class Example01 {
       { id: 'finish', name: 'Finish', field: 'finish', formatter: Formatters.dateIso, exportWithFormatter: true, filterable: true },
       { id: 'effort-driven', name: 'Effort Driven', field: 'effortDriven', sortable: true, minWidth: 100, filterable: true }
     ];
+    this._darkModeGrid1 = this.isBrowserDarkModeEnabled();
     this.gridOptions1 = {
       enableAutoResize: false,
+      darkMode: this._darkModeGrid1,
       gridHeight: 225,
       gridWidth: 800,
       rowHeight: 33,
@@ -67,6 +74,7 @@ export default class Example01 {
     this.gridOptions2 = {
       ...this.gridOptions1,
       ...{
+        darkMode: false,
         gridHeight: 255,
         headerRowHeight: 40,
         columnPicker: {
@@ -168,6 +176,16 @@ export default class Example01 {
     }
 
     return mockDataset;
+  }
+
+  toggleDarkModeGrid1() {
+    this._darkModeGrid1 = !this._darkModeGrid1;
+    if (this._darkModeGrid1) {
+      document.querySelector('.grid1')?.classList.add('dark-mode');
+    } else {
+      document.querySelector('.grid1')?.classList.remove('dark-mode');
+    }
+    this.sgb1.slickGrid?.setOptions({ darkMode: this._darkModeGrid1 });
   }
 
   // Toggle the Pagination of Grid2

@@ -87,12 +87,13 @@ const customEditableInputFormatter: Formatter = (_row, _cell, value, columnDef, 
 
 export default class Example12 {
   private _bindingEventService: BindingEventService;
+  private _darkMode = false;
   compositeEditorInstance: SlickCompositeEditorComponent;
   columnDefinitions: Column[];
   gridOptions: GridOption;
   dataset: any[] = [];
   isGridEditable = true;
-  editQueue: Array<{ item, columns: Column[], editCommand }> = [];
+  editQueue: Array<{ item, columns: Column[], editCommand; }> = [];
   editedItems = {};
   isCompositeDisabled = false;
   isMassSelectionDisabled = true;
@@ -136,8 +137,7 @@ export default class Example12 {
     this._bindingEventService.bind(this.gridContainerElm, 'ongridstatechanged', this.handleOnGridStateChanged.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'ondblclick', () => this.openCompositeModal('edit', 50));
     this._bindingEventService.bind(this.gridContainerElm, 'oncompositeeditorchange', this.handleOnCompositeEditorChange.bind(this));
-    this._bindingEventService.bind(this.gridContainerElm, 'onpaginationchanged', this.handleReRenderUnsavedStyling.bind(this));
-    this._bindingEventService.bind(this.gridContainerElm, 'onfilterchanged', this.handleReRenderUnsavedStyling.bind(this));
+    this._bindingEventService.bind(this.gridContainerElm, 'onrowsorcountchanged', this.handleReRenderUnsavedStyling.bind(this));
     this._bindingEventService.bind(this.gridContainerElm, 'onselectedrowidschanged', this.handleOnSelectedRowIdsChanged.bind(this));
   }
 
@@ -145,6 +145,7 @@ export default class Example12 {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
     this.gridContainerElm.remove();
+    document.querySelector('.demo-container')?.classList.remove('dark-mode');
   }
 
   initializeGrid() {
@@ -359,7 +360,7 @@ export default class Example12 {
       {
         id: 'action', name: 'Action', field: 'action', width: 70, minWidth: 70, maxWidth: 70,
         excludeFromExport: true,
-        formatter: () => `<div class="button-style margin-auto action-btn"><span class="mdi mdi-dots-vertical mdi-22px color-primary"></span></div>`,
+        formatter: () => `<div class="button-style margin-auto action-btn"><span class="mdi mdi-dots-vertical mdi-22px color-alt-default-light"></span></div>`,
         cellMenu: {
           hideCloseButton: false,
           commandTitle: 'Commands',
@@ -402,6 +403,7 @@ export default class Example12 {
       useSalesforceDefaultGridOptions: true,
       autoFixResizeRequiredGoodCount: 1,
       datasetIdPropertyName: 'id',
+      darkMode: this._darkMode,
       eventNamingStyle: EventNamingStyle.lowerCase,
       autoAddCustomEditorFormatter: customEditableInputFormatter,
       enableAddRow: true, // <-- this flag is required to work with the (create & clone) modal types
@@ -636,20 +638,6 @@ export default class Example12 {
     console.log('sortedSelectedIds', args.filteredIds.length, args.selectedRowIds.length);
   }
 
-  toggleGridEditReadonly() {
-    // first need undo all edits
-    this.undoAllEdits();
-
-    // then change a single grid options to make the grid non-editable (readonly)
-    this.isGridEditable = !this.isGridEditable;
-    this.sgb.gridOptions = { editable: this.isGridEditable };
-    this.gridOptions = this.sgb.gridOptions;
-    this.isCompositeDisabled = !this.isGridEditable;
-    if (!this.isGridEditable) {
-      this.isMassSelectionDisabled = true;
-    }
-  }
-
   removeUnsavedStylingFromCell(_item: any, column: Column, row: number) {
     // remove unsaved css class from that cell
     const cssStyleKey = `unsaved_highlight_${[column.id]}${row}`;
@@ -743,6 +731,31 @@ export default class Example12 {
     }
     this.sgb.slickGrid?.invalidate(); // re-render the grid only after every cells got rolled back
     this.editQueue = [];
+  }
+
+  toggleGridEditReadonly() {
+    // first need undo all edits
+    this.undoAllEdits();
+
+    // then change a single grid options to make the grid non-editable (readonly)
+    this.isGridEditable = !this.isGridEditable;
+    this.sgb.gridOptions = { ...this.sgb.gridOptions, editable: this.isGridEditable };
+    this.gridOptions = this.sgb.gridOptions;
+    this.isCompositeDisabled = !this.isGridEditable;
+    if (!this.isGridEditable) {
+      this.isMassSelectionDisabled = true;
+    }
+  }
+
+  toggleDarkMode() {
+    this._darkMode = !this._darkMode;
+    if (this._darkMode) {
+      document.querySelector('.demo-container')?.classList.add('dark-mode');
+    } else {
+      document.querySelector('.demo-container')?.classList.remove('dark-mode');
+    }
+    this.sgb.gridOptions = { ...this.sgb.gridOptions, darkMode: this._darkMode };
+    this.sgb.slickGrid?.setOptions({ darkMode: this._darkMode });
   }
 
   mockProducts() {
@@ -974,6 +987,7 @@ export default class Example12 {
         // showResetButtonOnEachEditor: true,
         onClose: () => Promise.resolve(confirm('You have unsaved changes, are you sure you want to close this window?')),
         onError: (error) => alert(error.message),
+        // onRendered: (modalElm) => console.log(modalElm),
         onSave: (formValues, _selection, dataContextOrUpdatedDatasetPreview) => {
           const serverResponseDelay = 50;
 
