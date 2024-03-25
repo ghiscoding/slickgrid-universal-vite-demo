@@ -1,5 +1,5 @@
 import { type Column, type GridOption, SlickEventHandler, Editors } from '@slickgrid-universal/common';
-import { Slicker, SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
+import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 import { ExampleGridOptions } from './example-grid-options';
 import './example19.scss';
 
