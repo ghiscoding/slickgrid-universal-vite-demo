@@ -1,26 +1,16 @@
-// import all CSS required by Slickgrid-Universal
-import 'flatpickr/dist/flatpickr.min.css';
-import './styles.scss';
-
 import { Renderer } from './renderer';
 import * as SlickerModule from '@slickgrid-universal/vanilla-bundle';
 import { App } from './app';
 import AppView from './app.html?raw';
 import { TranslateService } from './translate.service';
-
-// load necessary Flatpickr Locale(s), but make sure it's imported AFTER the SlickerModule import
-import 'flatpickr/dist/l10n/fr';
+import './styles.scss';
 
 class Main {
   app!: App;
   constructor(private renderer: Renderer) { }
 
   async loadApp() {
-    // this.app = new App();
-    // this.app.loadRoute()
-    // console.log(App, await import(`./app.ts` as any))
     this.app = this.renderer.loadViewModel(App);
-    // this.app = this.renderer.loadViewModel(await import(`./app.ts` as any));
     this.renderer.loadView(AppView);
 
     const translate = new TranslateService();
