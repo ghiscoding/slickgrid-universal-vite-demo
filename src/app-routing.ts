@@ -24,6 +24,11 @@ import Example21 from './examples/example21';
 import Example22 from './examples/example22';
 import Example23 from './examples/example23';
 import Example24 from './examples/example24';
+import Example25 from './examples/example25';
+import Example26 from './examples/example26';
+import Example27 from './examples/example27';
+import Example28 from './examples/example28';
+import Example29 from './examples/example29';
 
 export class AppRouting {
   constructor(private config: RouterConfig) {
@@ -53,6 +58,11 @@ export class AppRouting {
       { route: 'example22', name: 'example22', view: './examples/example22.html', viewModel: Example22, title: 'Example22', },
       { route: 'example23', name: 'example23', view: './examples/example23.html', viewModel: Example23, title: 'Example23', },
       { route: 'example24', name: 'example24', view: './examples/example24.html', viewModel: Example24, title: 'Example24', },
+      { route: 'example25', name: 'example25', view: './examples/example25.html', viewModel: Example25, title: 'Example25', },
+      { route: 'example26', name: 'example26', view: './examples/example26.html', viewModel: Example26, title: 'Example26', },
+      { route: 'example27', name: 'example27', view: './examples/example27.html', viewModel: Example27, title: 'Example27', },
+      { route: 'example28', name: 'example28', view: './examples/example28.html', viewModel: Example28, title: 'Example28', },
+      { route: 'example29', name: 'example29', view: './examples/example29.html', viewModel: Example29, title: 'Example29', },
       { route: '', redirect: 'example01' },
       { route: '**', redirect: 'example01' }
     ];

@@ -1,12 +1,13 @@
+import { BindingEventService } from '@slickgrid-universal/binding';
 import { type Column, Editors, FieldType, type GridOption, SlickEventHandler, } from '@slickgrid-universal/common';
 import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
 
 import { ExampleGridOptions } from './example-grid-options';
-import { BindingEventService } from '@slickgrid-universal/binding';
+import './example24.scss';
 
 const NB_ITEMS = 100;
 
-export default class Example20 {
+export default class Example24 {
   private _bindingEventService: BindingEventService;
   private _darkMode = false;
   private _eventHandler: SlickEventHandler;
