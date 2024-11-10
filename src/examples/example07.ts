@@ -27,8 +27,8 @@ export default class Example07 {
   duplicateTitleHeaderCount = 1;
   filteringEnabledClass = '';
   sortingEnabledClass = '';
-  selectedLanguage: string;
-  selectedLanguageFile: string;
+  selectedLanguage = 'en';
+  selectedLanguageFile = 'en.json';
   translateService: TranslateService;
 
   set isFilteringEnabled(enabled: boolean) {
@@ -43,7 +43,8 @@ export default class Example07 {
     // get the Translate Service from the window object,
     // it might be better with proper Dependency Injection but this project doesn't have any at this point
     this.translateService = (<any>window).TranslateService;
-    this.selectedLanguage = this.translateService.getCurrentLanguage();
+    this.translateService.use('en');
+    this.selectedLanguage = 'en';
     this.selectedLanguageFile = `${this.selectedLanguage}.json`;
     this.isFilteringEnabled = true;
     this.isSortingEnabled = true;
@@ -633,6 +634,11 @@ export default class Example07 {
 
     // or with multiple Ids and extra options
     // this.sgb.gridService.hideColumnByIds(['duration', 'finish'], { autoResizeColumns: false, hideFromColumnPicker: true, hideFromGridMenu: false });
+  }
+
+  showColumnSubset() {
+    // note that calling this function will NOT include dynamically created columns like row selection & row move, you need to include them yourself
+    this.sgb.gridService.showColumnByIds(['_move', '_checkbox_selector', 'title', 'action', 'percentComplete', 'start', 'finish']);
   }
 
   // Disable/Enable Filtering/Sorting functionalities
