@@ -179,15 +179,19 @@ var Hm=Object.defineProperty;var Gm=(s,e,t)=>e in s?Hm(s,e,{enumerable:!0,config
     </button>
     <button class="button is-small" data-test="clear-grouping-btn" onclick.delegate="clearGrouping()">
       <span class="mdi mdi-playlist-remove"></span>
-      <span>Clear grouping</span>
+      <span>Clear Grouping</span>
     </button>
     <button class="button is-small" data-test="collapse-all-btn" onclick.delegate="collapseAllGroups()">
       <span class="mdi mdi-arrow-collapse"></span>
-      <span>Collapse all groups</span>
+      <span>Collapse all Groups</span>
     </button>
     <button class="button is-small" data-test="expand-all-btn" onclick.delegate="expandAllGroups()">
       <span class="mdi mdi-arrow-expand"></span>
-      <span>Expand all groups</span>
+      <span>Expand all Groups</span>
+    </button>
+    <button class="button is-small" data-test="toggle-draggable-grouping-row" onclick.delegate="toggleDraggableGroupingRow()">
+      <span class="mdi mdi-arrow-expand"></span>
+      <span>Toggle Dragging Grouping Row</span>
     </button>
     <button class="button is-small" data-test="export-excel-btn" onclick.delegate="exportToExcel()">
       <span class="mdi mdi-file-excel-outline"></span>
