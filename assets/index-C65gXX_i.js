@@ -190,7 +190,6 @@ var Hm=Object.defineProperty;var Gm=(s,e,t)=>e in s?Hm(s,e,{enumerable:!0,config
       <span>Expand all Groups</span>
     </button>
     <button class="button is-small" data-test="toggle-draggable-grouping-row" onclick.delegate="toggleDraggableGroupingRow()">
-      <span class="mdi mdi-arrow-expand"></span>
       <span>Toggle Dragging Grouping Row</span>
     </button>
     <button class="button is-small" data-test="export-excel-btn" onclick.delegate="exportToExcel()">
