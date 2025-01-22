@@ -1,6 +1,7 @@
 import { type Column, type GridOption, SlickEventHandler, Editors, Formatters } from '@slickgrid-universal/common';
 import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-import { ExampleGridOptions } from './example-grid-options';
+
+import { ExampleGridOptions } from './example-grid-options.js';
 import './example19.scss';
 
 const NB_ITEMS = 100;
@@ -25,7 +26,12 @@ export default class Example19 {
     // mock some data (different in each dataset)
     this.dataset = this.getData(NB_ITEMS);
     this.gridContainerElm = document.querySelector<HTMLDivElement>(`.grid19`) as HTMLDivElement;
-    this.sgb = new Slicker.GridBundle(document.querySelector(`.grid19`) as HTMLDivElement, this.columnDefinitions, { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
+    this.sgb = new Slicker.GridBundle(
+      document.querySelector(`.grid19`) as HTMLDivElement,
+      this.columnDefinitions,
+      { ...ExampleGridOptions, ...this.gridOptions },
+      this.dataset
+    );
     document.body.classList.add('salesforce-theme');
 
     // bind any of the grid events, e.g. onSelectedRangesChanged to show selection range on screen
@@ -56,7 +62,7 @@ export default class Example19 {
         2: 'blocked-cell',
         3: 'blocked-cell',
         4: 'blocked-cell',
-      }
+      },
     };
     for (let i = 0; i < NB_ITEMS; i++) {
       hash[0][i] = 'blocked-cell';
@@ -80,7 +86,7 @@ export default class Example19 {
         name: '',
         field: 'num',
         width: 30,
-      }
+      },
     ];
 
     this.columnDefinitions.push({
@@ -89,16 +95,17 @@ export default class Example19 {
       field: 'approvalDate',
       minWidth: 120,
       width: 120,
-      editor: { model: Editors.date, type: 'date'},
+      editor: { model: Editors.date, type: 'date' },
       formatter: Formatters.dateIso,
-      exportWithFormatter: true
+      exportWithFormatter: true,
     });
     for (let i = 0; i < NB_ITEMS; i++) {
       this.columnDefinitions.push({
         id: i,
-        name: i < 26
-          ? String.fromCharCode('A'.charCodeAt(0) + (i % 26))
-          : String.fromCharCode('A'.charCodeAt(0) + (Math.floor(i / 26)) - 1) + String.fromCharCode('A'.charCodeAt(0) + (i % 26)),
+        name:
+          i < 26
+            ? String.fromCharCode('A'.charCodeAt(0) + (i % 26))
+            : String.fromCharCode('A'.charCodeAt(0) + Math.floor(i / 26) - 1) + String.fromCharCode('A'.charCodeAt(0) + (i % 26)),
         field: String(i),
         minWidth: 60,
         exportWithFormatter: true,
@@ -124,7 +131,7 @@ export default class Example19 {
       editable: this.isGridEditable,
       pagination: {
         pageSizes: [5, 10, 15, 20, 25, 50, 75, 100],
-        pageSize: 20
+        pageSize: 20,
       },
       headerRowHeight: 35,
       rowHeight: 30,
@@ -142,14 +149,14 @@ export default class Example19 {
         copyActiveEditorCell: true,
         removeDoubleQuotesOnPaste: true,
         replaceNewlinesWith: ' ',
-      }
+      },
     };
   }
 
   getData(itemCount: number) {
     // mock a dataset
     const datasetTmp: any[] = [];
-    const start = new Date(2000,0,1);
+    const start = new Date(2000, 0, 1);
     const end = new Date();
     for (let i = 0; i < itemCount; i++) {
       const d: any = (datasetTmp[i] = {});
