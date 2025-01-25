@@ -1,13 +1,14 @@
-import { Renderer } from './renderer';
 import * as SlickerModule from '@slickgrid-universal/vanilla-bundle';
-import { App } from './app';
+
+import { App } from './app.js';
 import AppView from './app.html?raw';
-import { TranslateService } from './translate.service';
+import { Renderer } from './renderer.js';
+import { TranslateService } from './translate.service.js';
 import './styles.scss';
 
 class Main {
   app!: App;
-  constructor(private renderer: Renderer) { }
+  constructor(private renderer: Renderer) {}
 
   async loadApp() {
     this.app = this.renderer.loadViewModel(App);
@@ -16,7 +17,7 @@ class Main {
     const translate = new TranslateService();
     translate.setup({
       loadPath: 'i18n/{{lang}}.json',
-      lang: 'en'
+      lang: 'en',
     });
     await translate.use('en');
 

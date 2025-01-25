@@ -1,4 +1,9 @@
-import { getDescendantProperty, PubSubService, TranslaterService, TranslateServiceEventName } from '@slickgrid-universal/common';
+import {
+  getDescendantProperty,
+  type PubSubService,
+  type TranslaterService,
+  type TranslateServiceEventName,
+} from '@slickgrid-universal/common';
 import { fetch } from 'whatwg-fetch/fetch';
 
 interface Locales {
@@ -82,17 +87,22 @@ export class TranslateService implements TranslaterService {
   }
 
   async use(newLang: string): Promise<Locales> {
+    const hasLangChanged = this._currentLanguage !== newLang;
     this._currentLanguage = newLang;
 
     // if it's already loaded in the cache, then resolve the locale set, else fetch it
     if (this._locales?.hasOwnProperty(newLang)) {
-      this.publishLanguageChangeEvent(newLang);
+      if (hasLangChanged) {
+        this.publishLanguageChangeEvent(newLang);
+      }
       return Promise.resolve(this._locales[newLang]);
     }
 
     const path = this._options.loadPath.replace(/{{lang}}/gi, newLang);
     const localeSet = await this.fetchLocales(path, newLang);
-    this.publishLanguageChangeEvent(newLang);
+    if (hasLangChanged) {
+      this.publishLanguageChangeEvent(newLang);
+    }
 
     return localeSet;
   }
