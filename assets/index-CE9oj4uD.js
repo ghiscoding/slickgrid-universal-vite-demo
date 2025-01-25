@@ -2762,7 +2762,6 @@ Jane,Doe,21,Student`);b(this,"_bindingEventService");b(this,"sgb");this._binding
       <a class="navbar-item" onclick.trigger="loadRoute('example01')"> Home </a>
 
       <a class="navbar-item has-text-white" href="https://ghiscoding.gitbook.io/slickgrid-universal/" target="_blank"> Documentation </a>
-      <a class="navbar-item" onclick.trigger="loadRoute('icons')"> SlickGrid Icons </a>
       <div class="navbar-item has-dropdown is-hoverable">
         <a class="navbar-link"> Examples 1-15 </a>
 
