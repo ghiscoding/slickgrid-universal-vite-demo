@@ -126,7 +126,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example01.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example01.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -180,7 +180,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example02.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example02.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -247,7 +247,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example03.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example03.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -305,7 +305,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example04.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example04.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -357,7 +357,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example05.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example05.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -436,7 +436,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example06.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example06.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -571,7 +571,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example07.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example07.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -648,7 +648,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example08.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example08.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -719,7 +719,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example09.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example09.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -844,7 +844,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example10.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example10.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -966,7 +966,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example11.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example11.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1060,7 +1060,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example12.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example12.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1172,7 +1172,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example13.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example13.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1198,7 +1198,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example14.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example14.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1301,7 +1301,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example15.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example15.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1409,7 +1409,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example16.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example16.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1437,7 +1437,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example17.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example17.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1494,7 +1494,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example18.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example18.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1576,7 +1576,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example19.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example19.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1622,7 +1622,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example20.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example20.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1679,7 +1679,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example21.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example21.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1743,7 +1743,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example22.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example22.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1756,7 +1756,7 @@
       </li>
       <li>
         Editedable rows, as well as modified cells are highlighted with a different color, which you can customize using css variables (see
-        <a target="_blank" href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example22.scss">
+        <a target="_blank" href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example22.scss">
           example22.scss </a
         >)
       </li>
@@ -1815,7 +1815,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example23.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example23.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1870,7 +1870,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example24.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example24.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1888,7 +1888,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example25.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example25.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -1926,7 +1926,7 @@
       <a
         class="is-size-5"
         target="_blank"
-        href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example26.ts"
+        href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example26.ts"
       >
         <span class="mdi mdi-link-variant"></span> code
       </a>
@@ -2012,7 +2012,7 @@
       <a
         class="is-size-5"
         target="_blank"
-        href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example27.ts"
+        href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example27.ts"
       >
         <span class="mdi mdi-link-variant"></span> code
       </a>
@@ -2102,7 +2102,7 @@
       <a
         class="is-size-5"
         target="_blank"
-        href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example28.ts"
+        href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example28.ts"
       >
         <span class="mdi mdi-link-variant"></span> code
       </a>
@@ -2161,7 +2161,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example29.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example29.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -2196,7 +2196,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example30.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example30.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -2236,7 +2236,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example31.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example31.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -2281,7 +2281,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example32.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example32.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -2361,7 +2361,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example33.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example33.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
@@ -2425,7 +2425,7 @@
       <a
         class="is-size-5"
         target="_blank"
-        href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example34.ts"
+        href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example34.ts"
       >
         <span class="mdi mdi-link-variant"></span> code
       </a>
@@ -2486,7 +2486,7 @@
     <a
       class="is-size-5"
       target="_blank"
-      href="https://github.com/ghiscoding/slickgrid-universal/blob/master/examples/vite-demo-vanilla-bundle/src/examples/example35.ts"
+      href="https://github.com/ghiscoding/slickgrid-universal-vite-demo/blob/main/src/examples/example35.ts"
     >
       <span class="mdi mdi-link-variant"></span> code
     </a>
