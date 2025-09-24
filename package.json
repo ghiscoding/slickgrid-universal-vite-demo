@@ -34,6 +34,6 @@
     "@types/node": "^24.5.2",
     "sass": "^1.93.0",
     "typescript": "^5.9.2",
-    "vite": "^7.1.6"
+    "vite": "npm:rolldown-vite@latest"
   }
 }
