@@ -1,9 +1,8 @@
 import { faker } from '@faker-js/faker';
 import { BindingEventService } from '@slickgrid-universal/binding';
-import { type Column, createDomElement, ExtensionName, type GridOption, SlickEventHandler } from '@slickgrid-universal/common';
+import { createDomElement, ExtensionName, SlickEventHandler, type Column, type GridOption } from '@slickgrid-universal/common';
 import { SlickRowDetailView } from '@slickgrid-universal/row-detail-view-plugin';
 import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-
 import { ExampleGridOptions } from './example-grid-options.js';
 import { InnerGridExample, type Distributor, type OrderData } from './example21-detail.js';
 
@@ -276,7 +275,7 @@ export default class Example21 {
   /** Loading template, can be an HTML string or an HTML Element */
   loadingTemplate() {
     const headerElm = createDomElement('h5', { className: 'title is-5' });
-    headerElm.appendChild(createDomElement('i', { className: 'mdi mdi-load mdi-spin-1s mdi-40px' }));
+    headerElm.appendChild(createDomElement('i', { className: 'mdi mdi-load mdi-spin-1s font-40px' }));
     headerElm.appendChild(document.createTextNode('Loading...'));
 
     return headerElm;
@@ -316,7 +315,7 @@ export default class Example21 {
 
     // fill the template on async delay
     return new Promise((resolve) => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         const itemDetail = item;
         itemDetail.orderData = orderData;
         itemDetail.isUsingInnerGridStatePresets = this.isUsingInnerGridStatePresets;

@@ -1,14 +1,15 @@
+import { addDay, format as tempoFormat } from '@formkit/tempo';
+import { BindingEventService } from '@slickgrid-universal/binding';
 import {
-  type Column,
-  type CursorPageInfo,
   Filters,
   Formatters,
+  OperatorType,
+  type Column,
+  type CursorPageInfo,
   type GridOption,
   type GridStateChange,
   type Metrics,
-  OperatorType,
 } from '@slickgrid-universal/common';
-import { BindingEventService } from '@slickgrid-universal/binding';
 import {
   GraphqlService,
   type GraphqlPaginatedResult,
@@ -16,11 +17,9 @@ import {
   type GraphqlServiceOption,
 } from '@slickgrid-universal/graphql';
 import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-import { addDay, format as tempoFormat } from '@formkit/tempo';
 import { type MultipleSelectOption } from 'multiple-select-vanilla';
-
-import { ExampleGridOptions } from './example-grid-options.js';
 import type { TranslateService } from '../translate.service.js';
+import { ExampleGridOptions } from './example-grid-options.js';
 import './example10.scss';
 import '../material-styles.scss';
 
@@ -352,7 +351,7 @@ export default class Example10 {
     };
 
     return new Promise<GraphqlPaginatedResult>((resolve) => {
-      window.setTimeout(() => {
+      setTimeout(() => {
         this.graphqlQuery = this.gridOptions.backendServiceApi!.service.buildQuery();
         if (this.isWithCursor) {
           // When using cursor pagination, the pagination service needs to be updated with the PageInfo data from the latest request
@@ -427,7 +426,7 @@ export default class Example10 {
       { columnId: 'name', direction: 'asc' },
       { columnId: 'company', direction: 'DESC' },
     ]);
-    window.setTimeout(() => {
+    setTimeout(() => {
       this.sgb?.paginationService?.changeItemPerPage(20);
       this.sgb?.paginationService?.goToPageNumber(2);
     });
