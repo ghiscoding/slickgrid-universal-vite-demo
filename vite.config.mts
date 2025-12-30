@@ -10,6 +10,13 @@ export default defineConfig(({ mode }) => {
       chunkSizeWarningLimit: 6000,
       emptyOutDir: true,
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          quietDeps: true,
+        },
+      },
+    },
     preview: {
       port: 3000
     },
