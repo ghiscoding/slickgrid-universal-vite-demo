@@ -3,7 +3,6 @@ import { BindingEventService } from '@slickgrid-universal/binding';
 import {
   Filters,
   Formatters,
-  OperatorType,
   type Column,
   type CurrentFilter,
   type GridOption,
@@ -124,11 +123,12 @@ export default class Example25 {
         filter: {
           model: Filters.sliderRange,
           maxValue: 100, // or you can use the options as well
-          operator: OperatorType.rangeInclusive, // defaults to inclusive
+          operator: 'RangeInclusive', // defaults to inclusive
           options: {
             hideSliderNumbers: false, // you can hide/show the slider numbers on both side
             min: 0,
             step: 5,
+            // filterWhileSliding: true, // uncomment this line to enable real-time filtering as the user slide the handle
           } as SliderRangeOption,
         },
       },
@@ -172,7 +172,7 @@ export default class Example25 {
         filterable: true,
         filter: {
           model: Filters.input,
-          operator: OperatorType.rangeExclusive, // defaults to exclusive
+          operator: 'RangeExclusive', // defaults to exclusive
         },
       },
       {
@@ -312,10 +312,10 @@ export default class Example25 {
         filters = [
           {
             columnId: 'finish',
-            operator: OperatorType.rangeInclusive,
+            operator: 'RangeInclusive',
             searchTerms: [`${currentYear}-01-01`, `${currentYear}-12-31`],
           },
-          { columnId: 'completed', operator: OperatorType.equal, searchTerms: [true] },
+          { columnId: 'completed', operator: '=', searchTerms: [true] },
         ];
         break;
       case 'nextYearTasks':
