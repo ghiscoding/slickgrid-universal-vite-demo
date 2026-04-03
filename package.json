@@ -21,6 +21,7 @@
     "@slickgrid-universal/pdf-export": "^10.3.0",
     "@slickgrid-universal/row-detail-view-plugin": "^10.3.0",
     "@slickgrid-universal/rxjs-observable": "^10.3.0",
+    "@slickgrid-universal/sql": "^10.3.0",
     "@slickgrid-universal/text-export": "^10.3.0",
     "@slickgrid-universal/vanilla-bundle": "^10.3.0",
     "@slickgrid-universal/vanilla-force-bundle": "^10.3.0",

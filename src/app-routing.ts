@@ -1,5 +1,3 @@
-import type { RouterConfig } from './interfaces.js';
-
 import Example01 from './examples/example01.js';
 import Example02 from './examples/example02.js';
 import Example03 from './examples/example03.js';
@@ -40,6 +38,8 @@ import Example37 from './examples/example37.js';
 import Example38 from './examples/example38.js';
 import Example39 from './examples/example39.js';
 import Example40 from './examples/example40.js';
+import Example41 from './examples/example41.js';
+import type { RouterConfig } from './interfaces.js';
 
 export class AppRouting {
   constructor(private config: RouterConfig) {
@@ -85,6 +85,7 @@ export class AppRouting {
       { route: 'example38', name: 'example38', view: './examples/example38.html', viewModel: Example38, title: 'Example38' },
       { route: 'example39', name: 'example39', view: './examples/example39.html', viewModel: Example39, title: 'Example39' },
       { route: 'example40', name: 'example40', view: './examples/example40.html', viewModel: Example40, title: 'Example40' },
+      { route: 'example41', name: 'example41', view: './examples/example41.html', viewModel: Example41, title: 'Example41' },
       { route: '', redirect: 'example01' },
       { route: '**', redirect: 'example01' },
     ];
