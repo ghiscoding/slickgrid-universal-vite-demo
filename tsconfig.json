@@ -8,7 +8,7 @@
       "ESNext",
       "DOM"
     ],
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "allowJs": true,
     "strict": true,
     "sourceMap": true,
