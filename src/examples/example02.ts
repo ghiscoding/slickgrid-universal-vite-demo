@@ -1,4 +1,4 @@
-import { BindingEventService } from '@slickgrid-universal/binding';
+import { BindingEventService } from "@slickgrid-universal/binding";
 import {
   Aggregators,
   Editors,
@@ -11,14 +11,17 @@ import {
   type GridOption,
   type Grouping,
   type SliderOption,
-} from '@slickgrid-universal/common';
-import { ExcelExportService } from '@slickgrid-universal/excel-export';
-import { PdfExportService } from '@slickgrid-universal/pdf-export';
-import { TextExportService } from '@slickgrid-universal/text-export';
-import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-import { ExampleGridOptions } from './example-grid-options.js';
-import '../material-styles.scss';
-import './example02.scss';
+} from "@slickgrid-universal/common";
+import { ExcelExportService } from "@slickgrid-universal/excel-export";
+import { PdfExportService } from "@slickgrid-universal/pdf-export";
+import { TextExportService } from "@slickgrid-universal/text-export";
+import {
+  Slicker,
+  type SlickVanillaGridBundle,
+} from "@slickgrid-universal/vanilla-bundle";
+import { ExampleGridOptions } from "./example-grid-options.js";
+import "../material-styles.scss";
+import "./example02.scss";
 
 const NB_ITEMS = 5000;
 
@@ -35,7 +38,7 @@ export default class Example02 {
   sgb: SlickVanillaGridBundle;
   excelExportService: ExcelExportService;
   pdfExportService: PdfExportService;
-  loadingClass = '';
+  loadingClass = "";
   sortStart = 0;
 
   constructor() {
@@ -47,64 +50,75 @@ export default class Example02 {
   attached() {
     this.initializeGrid();
     this.dataset = this.loadData(NB_ITEMS);
-    const gridContainerElm = document.querySelector<HTMLDivElement>('.grid2') as HTMLDivElement;
+    const gridContainerElm = document.querySelector<HTMLDivElement>(
+      ".grid2",
+    ) as HTMLDivElement;
 
     this._bindingEventService.bind(
       gridContainerElm,
-      ['onbeforeexporttoexcel', 'onbeforeexporttopdf'],
-      () => (this.loadingClass = 'mdi mdi-load mdi-spin-1s font-22px')
+      ["onbeforeexporttoexcel", "onbeforeexporttopdf"],
+      () => (this.loadingClass = "mdi mdi-load mdi-spin-1s font-22px"),
     );
-    this._bindingEventService.bind(gridContainerElm, ['onafterexporttoexcel', 'onafterexporttopdf'], () => (this.loadingClass = ''));
-    this._bindingEventService.bind(gridContainerElm, 'onbeforesort', () => {
+    this._bindingEventService.bind(
+      gridContainerElm,
+      ["onafterexporttoexcel", "onafterexporttopdf"],
+      () => (this.loadingClass = ""),
+    );
+    this._bindingEventService.bind(gridContainerElm, "onbeforesort", () => {
       // console.time('sort');
       this.sortStart = window.performance.now();
     });
-    this._bindingEventService.bind(gridContainerElm, 'onsortchanged', () => {
+    this._bindingEventService.bind(gridContainerElm, "onsortchanged", () => {
       queueMicrotask(() => {
         // console.timeEnd('sort');
         console.log(`sort: ${window.performance.now() - this.sortStart} ms`); // use console for Cypress tests
       });
     });
-    this.sgb = new Slicker.GridBundle(gridContainerElm, this.columns, { ...ExampleGridOptions, ...this.gridOptions }, this.dataset);
+    this.sgb = new Slicker.GridBundle(
+      gridContainerElm,
+      this.columns,
+      { ...ExampleGridOptions, ...this.gridOptions },
+      this.dataset,
+    );
 
     // you could group by duration on page load (must be AFTER the DataView is created, so after GridBundle)
     this.groupByDuration();
 
     // override CSS template to be Material Design
     // await import('@slickgrid-universal/common/dist/styles/sass/slickgrid-theme-material.scss');
-    document.body.classList.add('material-theme');
+    document.body.classList.add("material-theme");
   }
 
   dispose() {
     this.sgb?.dispose();
     this._bindingEventService.unbindAll();
-    document.body.classList.remove('material-theme');
+    document.body.classList.remove("material-theme");
   }
 
   initializeGrid() {
     // add a simple button with event listener on 1st column for testing purposes
     // a simple button with click event
-    const nameElementColumn1 = document.createElement('div');
-    const btn = document.createElement('button');
-    const btnLabel = document.createElement('span');
-    btnLabel.className = 'mdi mdi-help-circle no-padding';
-    btn.dataset.test = 'col1-hello-btn';
-    btn.className = 'button is-small ml-5';
-    btn.textContent = 'Click me';
-    btn.title = 'simple column header test with a button click listener';
+    const nameElementColumn1 = document.createElement("div");
+    const btn = document.createElement("button");
+    const btnLabel = document.createElement("span");
+    btnLabel.className = "mdi mdi-help-circle no-padding";
+    btn.dataset.test = "col1-hello-btn";
+    btn.className = "button is-small ml-5";
+    btn.textContent = "Click me";
+    btn.title = "simple column header test with a button click listener";
     btn.tabIndex = 0;
-    btn.addEventListener('click', () => alert('Hello World'));
+    btn.addEventListener("click", () => alert("Hello World"));
     btn.appendChild(btnLabel);
-    nameElementColumn1.appendChild(document.createTextNode('Id '));
+    nameElementColumn1.appendChild(document.createTextNode("Id "));
     nameElementColumn1.appendChild(btn);
 
     this.columns = [
       {
-        id: 'num',
+        id: "num",
         name: nameElementColumn1,
-        field: 'num',
-        type: 'number',
-        columnPickerLabel: 'Custom Label', // add a custom label for the ColumnPicker/GridMenu when default header value extractor doesn't work for you ()
+        field: "num",
+        type: "number",
+        columnPickerLabel: "Custom Label", // add a custom label for the ColumnPicker/GridMenu when default header value extractor doesn't work for you ()
         width: 160,
         maxWidth: 200,
         excludeFromExport: true,
@@ -113,41 +127,41 @@ export default class Example02 {
         selectable: false,
       },
       {
-        id: 'title',
-        name: 'Title',
-        field: 'title',
+        id: "title",
+        name: "Title",
+        field: "title",
         width: 50,
         minWidth: 50,
-        cssClass: 'cell-title',
+        cssClass: "cell-title",
         filterable: true,
         sortable: true,
       },
       {
-        id: 'duration',
-        name: 'Duration',
-        field: 'duration',
+        id: "duration",
+        name: "Duration",
+        field: "duration",
         minWidth: 50,
         width: 60,
         filterable: true,
         filter: {
           model: Filters.slider,
-          operator: '>=',
+          operator: ">=",
           options: {
             hideSliderNumber: true,
             enableSliderTrackColoring: true,
-            sliderTrackFilledColor: '#9ac49c',
+            sliderTrackFilledColor: "#9ac49c",
             filterWhileSliding: true, // uncomment this line to enable real-time filtering as the user slide the handle
           } as SliderOption,
         },
         sortable: true,
-        type: 'number',
+        type: "number",
         groupTotalsFormatter: GroupTotalFormatters.sumTotals,
-        params: { groupFormatterPrefix: 'Total: ' },
+        params: { groupFormatterPrefix: "Total: " },
       },
       {
-        id: 'percentComplete',
-        name: '% Complete',
-        field: 'percentComplete',
+        id: "percentComplete",
+        name: "% Complete",
+        field: "percentComplete",
         minWidth: 70,
         width: 90,
         formatter: Formatters.percentCompleteBar,
@@ -155,87 +169,97 @@ export default class Example02 {
         filterable: true,
         filter: { model: Filters.compoundSlider },
         sortable: true,
-        type: 'number',
+        type: "number",
         groupTotalsFormatter: GroupTotalFormatters.avgTotalsPercentage,
-        params: { groupFormatterPrefix: '<i>Avg</i>: ' },
+        params: { groupFormatterPrefix: "<i>Avg</i>: " },
       },
       {
-        id: 'start',
-        name: 'Start',
-        field: 'start',
+        id: "start",
+        name: "Start",
+        field: "start",
         minWidth: 60,
         maxWidth: 130,
         filterable: true,
         filter: { model: Filters.compoundDate },
         editor: { model: Editors.date },
         sortable: true,
-        type: 'dateUsShort',
+        type: "dateUsShort",
         formatter: Formatters.dateUs,
         exportWithFormatter: true,
       },
       {
-        id: 'finish',
-        name: 'Finish',
-        field: 'finish',
+        id: "finish",
+        name: "Finish",
+        field: "finish",
         minWidth: 60,
         maxWidth: 130,
         filterable: true,
         filter: { model: Filters.compoundDate },
         editor: { model: Editors.date },
         sortable: true,
-        type: 'dateUsShort',
+        type: "dateUsShort",
         formatter: Formatters.dateUs,
       },
       {
-        id: 'cost',
-        name: 'Cost',
-        field: 'cost',
+        id: "cost",
+        name: "Cost",
+        field: "cost",
         minWidth: 70,
         width: 80,
         sortable: true,
         filterable: true,
         filter: { model: Filters.compoundInputNumber },
-        type: 'number',
+        type: "number",
         formatter: Formatters.currency,
         groupTotalsFormatter: GroupTotalFormatters.sumTotalsCurrency,
         params: {
           displayNegativeNumberWithParentheses: true,
-          currencyPrefix: '€',
-          groupFormatterCurrencyPrefix: '€',
+          currencyPrefix: "€",
+          groupFormatterCurrencyPrefix: "€",
           minDecimal: 2,
           maxDecimal: 4,
-          groupFormatterPrefix: '<b>Total</b>: ',
+          groupFormatterPrefix: "<b>Total</b>: ",
         },
         excelExportOptions: {
           style: {
-            font: { outline: true, italic: true },
-            format: '€0.00##;[Red](€0.00##)',
+            font: { outline: false, italic: true },
+            format: "€0.00##;[Red](€0.00##)",
           },
           width: 18,
         },
         groupTotalsExcelExportOptions: {
           style: {
-            alignment: { horizontal: 'center' },
-            font: { bold: true, color: 'FF005289', underline: 'single', fontName: 'Consolas', size: 10 },
-            fill: { type: 'pattern', patternType: 'solid', fgColor: 'FFE6F2F6' },
+            alignment: { horizontal: "center" },
+            font: {
+              bold: true,
+              color: "FF005289",
+              underline: "single",
+              fontName: "Consolas",
+              size: 10,
+            },
+            fill: {
+              type: "pattern",
+              patternType: "solid",
+              fgColor: "FFE6F2F6",
+            },
             border: {
-              top: { color: 'FFa500ff', style: 'thick' },
-              left: { color: 'FFa500ff', style: 'medium' },
-              right: { color: 'FFa500ff', style: 'dotted' },
-              bottom: { color: 'FFa500ff', style: 'double' },
+              top: { color: "FFa500ff", style: "thick" },
+              left: { color: "FFa500ff", style: "medium" },
+              right: { color: "FFa500ff", style: "dotted" },
+              bottom: { color: "FFa500ff", style: "double" },
             },
             format: '"Total: "€0.00##;[Red]"Total: "(€0.00##)',
           },
         },
       },
       {
-        id: 'effortDriven',
-        name: 'Effort Driven',
+        id: "effortDriven",
+        name: "Effort Driven",
         minWidth: 30,
         width: 80,
         maxWidth: 90,
-        cssClass: 'cell-effort-driven',
-        field: 'effortDriven',
+        cssClass: "cell-effort-driven",
+        field: "effortDriven",
         formatter: Formatters.checkmarkMaterial,
         sortable: true,
         filterable: true,
@@ -244,9 +268,9 @@ export default class Example02 {
 
           // pass a regular collection array with value/label pairs
           collection: [
-            { value: '', label: '' },
-            { value: true, label: 'True' },
-            { value: false, label: 'False' },
+            { value: "", label: "" },
+            { value: true, label: "True" },
+            { value: false, label: "False" },
           ],
 
           // Select Filters can also support collection that are async, it could be a Promise (shown below) or Fetch result
@@ -275,11 +299,11 @@ export default class Example02 {
       },
       enableExcelExport: true,
       excelExportOptions: {
-        filename: 'my-export',
+        filename: "my-export",
         sanitizeDataExport: true,
         columnHeaderStyle: {
-          font: { color: 'FFFFFFFF' },
-          fill: { type: 'pattern', patternType: 'solid', fgColor: 'FF4a6c91' },
+          font: { color: "FFFFFFFF" },
+          fill: { type: "pattern", patternType: "solid", fgColor: "FF4a6c91" },
         },
 
         // optionally pass a custom header to the Excel Sheet
@@ -288,24 +312,40 @@ export default class Example02 {
         customExcelHeader: (workbook, sheet) => {
           const excelFormat = workbook.getStyleSheet().createFormat({
             // every color is prefixed with FF, then regular HTML color
-            font: { size: 18, fontName: 'Calibri', bold: true, color: 'FFFFFFFF' },
-            alignment: { wrapText: true, horizontal: 'center' },
-            fill: { type: 'pattern', patternType: 'solid', fgColor: 'FF203764' },
+            font: {
+              size: 18,
+              fontName: "Calibri",
+              bold: true,
+              color: "FFFFFFFF",
+            },
+            alignment: { wrapText: true, horizontal: "center" },
+            fill: {
+              type: "pattern",
+              patternType: "solid",
+              fgColor: "FF203764",
+            },
           });
           sheet.setRowInstructions(0, { height: 50 }); // change height of row 0
 
           // excel cells start with A1 which is upper left corner
-          const customTitle = 'Grouping and Aggregator - My header is too long enough, so it will wrap';
-          sheet.mergeCells('A1', 'H1');
-          sheet.data.push([{ value: customTitle, metadata: { style: excelFormat.id } }]);
+          const customTitle =
+            "Grouping and Aggregator - My header is too long enough, so it will wrap";
+          sheet.mergeCells("A1", "H1");
+          sheet.data.push([
+            { value: customTitle, metadata: { style: excelFormat.id } },
+          ]);
         },
       },
       pdfExportOptions: {
         repeatHeadersOnEachPage: false,
-        documentTitle: 'Grouping Grid',
+        documentTitle: "Grouping Grid",
       },
-      textExportOptions: { filename: 'my-export', sanitizeDataExport: true },
-      externalResources: [this.excelExportService, this.pdfExportService, new TextExportService()],
+      textExportOptions: { filename: "my-export", sanitizeDataExport: true },
+      externalResources: [
+        this.excelExportService,
+        this.pdfExportService,
+        new TextExportService(),
+      ],
       showCustomFooter: true, // display some metrics in the bottom custom footer
       customFooterOptions: {
         // optionally display some text on the left footer container
@@ -316,10 +356,10 @@ export default class Example02 {
         hideLastUpdateTimestamp: false,
       },
       // forceSyncScrolling: true,
-      rowTopOffsetRenderType: 'transform', // defaults: 'top'
+      rowTopOffsetRenderType: "transform", // defaults: 'top'
 
       // you can improve Date sorting by pre-parsing date items to `Date` object (this avoid reparsing the same dates multiple times)
-      preParseDateColumns: '__', // or true
+      preParseDateColumns: "__", // or true
     };
   }
 
@@ -335,13 +375,14 @@ export default class Example02 {
       const randomMonth = randomBetween(1, 12);
       const randomDay = randomBetween(5, 28);
       const randomPercent = Math.round(Math.random() * 100);
-      const randomCost = i % 33 === 0 ? null : Math.round(Math.random() * 10000) / 100;
+      const randomCost =
+        i % 33 === 0 ? null : Math.round(Math.random() * 10000) / 100;
 
       tmpArray[i] = {
-        id: 'id_' + i,
+        id: "id_" + i,
         num: i,
-        title: 'Task ' + i,
-        duration: Math.round(Math.random() * 100) + '',
+        title: "Task " + i,
+        duration: Math.round(Math.random() * 100) + "",
         percentComplete: randomPercent,
         percentCompleteNumber: randomPercent,
         start: `${randomMonth}/${randomDay}/${randomYearShort}`,
@@ -369,21 +410,31 @@ export default class Example02 {
   }
 
   exportToExcel() {
-    this.excelExportService.exportToExcel({ filename: 'export', format: 'xlsx' });
+    this.excelExportService.exportToExcel({
+      filename: "export",
+      format: "xlsx",
+    });
   }
 
   exportToPdf() {
-    this.pdfExportService.exportToPdf({ filename: 'Export' });
+    this.pdfExportService.exportToPdf({ filename: "Export" });
   }
 
   groupByDuration() {
     // you need to manually add the sort icon(s) in UI
-    this.sgb?.slickGrid?.setSortColumns([{ columnId: 'duration', sortAsc: true }]);
+    this.sgb?.slickGrid?.setSortColumns([
+      { columnId: "duration", sortAsc: true },
+    ]);
     this.sgb?.dataView?.setGrouping({
-      getter: 'duration',
-      formatter: (g) => `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
-      comparer: (a, b) => SortComparers.numeric(a.value, b.value, SortDirectionNumber.asc),
-      aggregators: [new Aggregators.Avg('percentComplete'), new Aggregators.Sum('cost')],
+      getter: "duration",
+      formatter: (g) =>
+        `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
+      comparer: (a, b) =>
+        SortComparers.numeric(a.value, b.value, SortDirectionNumber.asc),
+      aggregators: [
+        new Aggregators.Avg("percentComplete"),
+        new Aggregators.Sum("cost"),
+      ],
       aggregateCollapsed: false,
       lazyTotalsCalculation: true,
     } as Grouping);
@@ -393,10 +444,14 @@ export default class Example02 {
   groupByDurationOrderByCount(aggregateCollapsed) {
     this.sgb?.slickGrid?.setSortColumns([]);
     this.sgb?.dataView?.setGrouping({
-      getter: 'duration',
-      formatter: (g) => `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
+      getter: "duration",
+      formatter: (g) =>
+        `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
       comparer: (a, b) => a.count - b.count,
-      aggregators: [new Aggregators.Avg('percentComplete'), new Aggregators.Sum('cost')],
+      aggregators: [
+        new Aggregators.Avg("percentComplete"),
+        new Aggregators.Sum("cost"),
+      ],
       aggregateCollapsed,
       lazyTotalsCalculation: true,
     } as Grouping);
@@ -406,22 +461,30 @@ export default class Example02 {
   groupByDurationEffortDriven() {
     // you need to manually add the sort icon(s) in UI
     const sortColumns = [
-      { columnId: 'duration', sortAsc: true },
-      { columnId: 'effortDriven', sortAsc: true },
+      { columnId: "duration", sortAsc: true },
+      { columnId: "effortDriven", sortAsc: true },
     ];
     this.sgb?.slickGrid?.setSortColumns(sortColumns);
     this.sgb?.dataView?.setGrouping([
       {
-        getter: 'duration',
-        formatter: (g) => `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
-        aggregators: [new Aggregators.Sum('duration'), new Aggregators.Sum('cost')],
+        getter: "duration",
+        formatter: (g) =>
+          `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
+        aggregators: [
+          new Aggregators.Sum("duration"),
+          new Aggregators.Sum("cost"),
+        ],
         aggregateCollapsed: true,
         lazyTotalsCalculation: true,
       },
       {
-        getter: 'effortDriven',
-        formatter: (g) => `Effort-Driven: ${g.value ? 'True' : 'False'} <span class="text-green">(${g.count} items)</span>`,
-        aggregators: [new Aggregators.Avg('percentComplete'), new Aggregators.Sum('cost')],
+        getter: "effortDriven",
+        formatter: (g) =>
+          `Effort-Driven: ${g.value ? "True" : "False"} <span class="text-green">(${g.count} items)</span>`,
+        aggregators: [
+          new Aggregators.Avg("percentComplete"),
+          new Aggregators.Sum("cost"),
+        ],
         collapsed: true,
         lazyTotalsCalculation: true,
       },
@@ -432,29 +495,38 @@ export default class Example02 {
   groupByDurationEffortDrivenPercent() {
     // you need to manually add the sort icon(s) in UI
     const sortColumns = [
-      { columnId: 'duration', sortAsc: true },
-      { columnId: 'effortDriven', sortAsc: true },
-      { columnId: 'percentComplete', sortAsc: true },
+      { columnId: "duration", sortAsc: true },
+      { columnId: "effortDriven", sortAsc: true },
+      { columnId: "percentComplete", sortAsc: true },
     ];
     this.sgb?.slickGrid?.setSortColumns(sortColumns);
     this.sgb?.dataView?.setGrouping([
       {
-        getter: 'duration',
-        formatter: (g) => `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
-        aggregators: [new Aggregators.Sum('duration'), new Aggregators.Sum('cost')],
+        getter: "duration",
+        formatter: (g) =>
+          `Duration: ${g.value} <span class="text-green">(${g.count} items)</span>`,
+        aggregators: [
+          new Aggregators.Sum("duration"),
+          new Aggregators.Sum("cost"),
+        ],
         aggregateCollapsed: true,
         lazyTotalsCalculation: true,
       },
       {
-        getter: 'effortDriven',
-        formatter: (g) => `Effort-Driven: ${g.value ? 'True' : 'False'}  <span class="text-green">(${g.count} items)</span>`,
-        aggregators: [new Aggregators.Sum('duration'), new Aggregators.Sum('cost')],
+        getter: "effortDriven",
+        formatter: (g) =>
+          `Effort-Driven: ${g.value ? "True" : "False"}  <span class="text-green">(${g.count} items)</span>`,
+        aggregators: [
+          new Aggregators.Sum("duration"),
+          new Aggregators.Sum("cost"),
+        ],
         lazyTotalsCalculation: true,
       },
       {
-        getter: 'percentComplete',
-        formatter: (g) => `% Complete: ${g.value}  <span class="text-green">(${g.count} items)</span>`,
-        aggregators: [new Aggregators.Avg('percentComplete')],
+        getter: "percentComplete",
+        formatter: (g) =>
+          `% Complete: ${g.value}  <span class="text-green">(${g.count} items)</span>`,
+        aggregators: [new Aggregators.Avg("percentComplete")],
         aggregateCollapsed: true,
         collapsed: true,
         lazyTotalsCalculation: true,

@@ -1,4 +1,4 @@
-import { BindingEventService } from '@slickgrid-universal/binding';
+import { BindingEventService } from "@slickgrid-universal/binding";
 import {
   Aggregators,
   Editors,
@@ -13,11 +13,14 @@ import {
   type Grouping,
   type SlickGrid,
   type SlickGroupTotals,
-} from '@slickgrid-universal/common';
-import { ExcelExportService } from '@slickgrid-universal/excel-export';
-import { Slicker, type SlickVanillaGridBundle } from '@slickgrid-universal/vanilla-bundle';
-import { ExampleGridOptions } from './example-grid-options.js';
-import './example23.scss';
+} from "@slickgrid-universal/common";
+import { ExcelExportService } from "@slickgrid-universal/excel-export";
+import {
+  Slicker,
+  type SlickVanillaGridBundle,
+} from "@slickgrid-universal/vanilla-bundle";
+import { ExampleGridOptions } from "./example-grid-options.js";
+import "./example23.scss";
 
 interface GroceryItem {
   id: number;
@@ -31,7 +34,11 @@ interface GroceryItem {
 }
 
 /** Check if the current item (cell) is editable or not */
-function checkItemIsEditable(_dataContext: GroceryItem, columnDef: Column, grid: SlickGrid) {
+function checkItemIsEditable(
+  _dataContext: GroceryItem,
+  columnDef: Column,
+  grid: SlickGrid,
+) {
   const gridOptions = grid.getOptions();
   const hasEditor = columnDef.editor;
   const isGridEditable = gridOptions.editable;
@@ -40,11 +47,18 @@ function checkItemIsEditable(_dataContext: GroceryItem, columnDef: Column, grid:
   return isEditable;
 }
 
-const customEditableInputFormatter: Formatter = (_row, _cell, value, columnDef, dataContext: GroceryItem, grid) => {
+const customEditableInputFormatter: Formatter = (
+  _row,
+  _cell,
+  value,
+  columnDef,
+  dataContext: GroceryItem,
+  grid,
+) => {
   const isEditableItem = checkItemIsEditable(dataContext, columnDef, grid);
-  value = value === null || value === undefined ? '' : value;
-  const divElm = document.createElement('div');
-  divElm.className = 'editing-field';
+  value = value === null || value === undefined ? "" : value;
+  const divElm = document.createElement("div");
+  divElm.className = "editing-field";
   if (value instanceof HTMLElement) {
     divElm.appendChild(value);
   } else {
@@ -56,11 +70,11 @@ const customEditableInputFormatter: Formatter = (_row, _cell, value, columnDef, 
 /** Create a Custom Aggregator in order to calculate all Totals by accessing other fields of the item dataContext */
 export class CustomSumAggregator implements Aggregator {
   private _sum = 0;
-  private _type = 'sum' as const;
+  private _type = "sum" as const;
 
   constructor(
     public readonly field: number | string,
-    public taxRate: number
+    public taxRate: number,
   ) {}
 
   get type(): string {
@@ -72,18 +86,18 @@ export class CustomSumAggregator implements Aggregator {
   }
 
   accumulate(item: GroceryItem) {
-    if (this.field === 'taxes' && item['taxable']) {
-      this._sum += item['price'] * item['qty'] * (this.taxRate / 100);
+    if (this.field === "taxes" && item["taxable"]) {
+      this._sum += item["price"] * item["qty"] * (this.taxRate / 100);
     }
-    if (this.field === 'subTotal') {
-      this._sum += item['price'] * item['qty'];
+    if (this.field === "subTotal") {
+      this._sum += item["price"] * item["qty"];
     }
-    if (this.field === 'total') {
+    if (this.field === "total") {
       let taxes = 0;
-      if (item['taxable']) {
-        taxes = item['price'] * item['qty'] * (this.taxRate / 100);
+      if (item["taxable"]) {
+        taxes = item["price"] * item["qty"] * (this.taxRate / 100);
       }
-      this._sum += item['price'] * item['qty'] + taxes;
+      this._sum += item["price"] * item["qty"] + taxes;
     }
   }
 
@@ -117,51 +131,57 @@ export default class Example23 {
 
     // mock some data (different in each dataset)
     this.dataset = this.getData();
-    this.gridContainerElm = document.querySelector<HTMLDivElement>('.grid23') as HTMLDivElement;
-    this._bindingEventService.bind(this.gridContainerElm, 'oncellchange', this.invalidateAll.bind(this));
+    this.gridContainerElm = document.querySelector<HTMLDivElement>(
+      ".grid23",
+    ) as HTMLDivElement;
+    this._bindingEventService.bind(
+      this.gridContainerElm,
+      "oncellchange",
+      this.invalidateAll.bind(this),
+    );
 
     this.sgb = new Slicker.GridBundle(
-      document.querySelector('.grid23') as HTMLDivElement,
+      document.querySelector(".grid23") as HTMLDivElement,
       this.columns,
       { ...ExampleGridOptions, ...this.gridOptions },
-      this.dataset
+      this.dataset,
     );
-    document.body.classList.add('salesforce-theme');
+    document.body.classList.add("salesforce-theme");
   }
 
   dispose() {
     this._bindingEventService.unbindAll();
     this.sgb?.dispose();
     this.gridContainerElm.remove();
-    document.body.classList.remove('salesforce-theme');
+    document.body.classList.remove("salesforce-theme");
   }
 
   /* Define grid Options and Columns */
   defineGrid() {
     this.columns = [
       {
-        id: 'sel',
-        name: '#',
-        field: 'id',
-        headerCssClass: 'header-centered',
-        cssClass: 'cell-unselectable',
+        id: "sel",
+        name: "#",
+        field: "id",
+        headerCssClass: "header-centered",
+        cssClass: "cell-unselectable",
         excludeFromExport: true,
         maxWidth: 30,
       },
       {
-        id: 'name',
-        name: 'Name',
-        field: 'name',
+        id: "name",
+        name: "Name",
+        field: "name",
         sortable: true,
         width: 140,
         filterable: true,
         excelExportOptions: { width: 18 },
       },
       {
-        id: 'price',
-        name: 'Price',
-        field: 'price',
-        type: 'number',
+        id: "price",
+        name: "Price",
+        field: "price",
+        type: "number",
         editor: { model: Editors.float, decimal: 2 },
         sortable: true,
         width: 70,
@@ -171,22 +191,22 @@ export default class Example23 {
         groupTotalsExcelExportOptions: {
           style: {
             font: { bold: true, size: 11.5 },
-            format: '$0.00', // currency format
-            border: { top: { color: 'FF747474', style: 'thick' } },
+            format: "$0.00", // currency format
+            border: { top: { color: "FF747474", style: "thick" } },
           },
           valueParserCallback: this.excelGroupCellParser.bind(this),
         },
       },
       {
-        id: 'qty',
-        name: 'Quantity',
-        field: 'qty',
-        type: 'number',
+        id: "qty",
+        name: "Quantity",
+        field: "qty",
+        type: "number",
         groupTotalsFormatter: GroupTotalFormatters.sumTotalsBold,
         groupTotalsExcelExportOptions: {
           style: {
             font: { bold: true, size: 11.5 },
-            border: { top: { color: 'FF747474', style: 'thick' } },
+            border: { top: { color: "FF747474", style: "thick" } },
           },
           valueParserCallback: this.excelGroupCellParser.bind(this),
         },
@@ -197,11 +217,11 @@ export default class Example23 {
         filterable: true,
       },
       {
-        id: 'subTotal',
-        name: 'Sub-Total',
-        field: 'subTotal',
-        cssClass: 'text-sub-total',
-        type: 'number',
+        id: "subTotal",
+        name: "Sub-Total",
+        field: "subTotal",
+        cssClass: "text-sub-total",
+        type: "number",
         sortable: true,
         width: 70,
         filterable: true,
@@ -210,14 +230,15 @@ export default class Example23 {
         groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollarBold,
         params: {
           formatters: [
-            (_row, _cell, _value, _coldef, dataContext) => dataContext.price * dataContext.qty,
+            (_row, _cell, _value, _coldef, dataContext) =>
+              dataContext.price * dataContext.qty,
             Formatters.dollar,
           ] as Formatter[],
         },
         excelExportOptions: {
           style: {
-            font: { outline: true, italic: true, color: 'FF215073' },
-            format: '$0.00', // currency format
+            font: { outline: false, italic: true, color: "FF215073" },
+            format: "$0.00", // currency format
           },
           width: 12,
           valueParserCallback: this.excelRegularCellParser.bind(this),
@@ -225,34 +246,34 @@ export default class Example23 {
         groupTotalsExcelExportOptions: {
           style: {
             font: { bold: true, italic: true, size: 11.5 },
-            format: '$0.00', // currency format
-            border: { top: { color: 'FF747474', style: 'thick' } },
+            format: "$0.00", // currency format
+            border: { top: { color: "FF747474", style: "thick" } },
           },
           valueParserCallback: this.excelGroupCellParser.bind(this),
         },
       },
       {
-        id: 'taxable',
-        name: 'Taxable',
-        field: 'taxable',
-        cssClass: 'text-center',
+        id: "taxable",
+        name: "Taxable",
+        field: "taxable",
+        cssClass: "text-center",
         sortable: true,
         width: 60,
         filterable: true,
         formatter: Formatters.checkmarkMaterial,
-        exportCustomFormatter: (_row, _cell, val) => (val ? '✓' : ''),
+        exportCustomFormatter: (_row, _cell, val) => (val ? "✓" : ""),
         excelExportOptions: {
           style: {
-            alignment: { horizontal: 'center' },
+            alignment: { horizontal: "center" },
           },
         },
       },
       {
-        id: 'taxes',
-        name: 'Taxes',
-        field: 'taxes',
-        cssClass: 'text-taxes',
-        type: 'number',
+        id: "taxes",
+        name: "Taxes",
+        field: "taxes",
+        cssClass: "text-taxes",
+        type: "number",
         sortable: true,
         width: 70,
         filterable: true,
@@ -262,7 +283,9 @@ export default class Example23 {
           formatters: [
             (_row, _cell, _value, _coldef, dataContext) => {
               if (dataContext.taxable) {
-                return dataContext.price * dataContext.qty * (this.taxRate / 100);
+                return (
+                  dataContext.price * dataContext.qty * (this.taxRate / 100)
+                );
               }
               return null;
             },
@@ -271,30 +294,30 @@ export default class Example23 {
         },
         excelExportOptions: {
           style: {
-            font: { outline: true, italic: true, color: 'FFC65911' },
-            format: '$0.00', // currency format
+            font: { outline: false, italic: true, color: "FFC65911" },
+            format: "$0.00", // currency format
           },
           width: 12,
           valueParserCallback: this.excelRegularCellParser.bind(this),
         },
         groupTotalsExcelExportOptions: {
           style: {
-            font: { bold: true, italic: true, color: 'FFC65911', size: 11.5 },
-            format: '$0.00', // currency format
-            border: { top: { color: 'FF747474', style: 'thick' } },
+            font: { bold: true, italic: true, color: "FFC65911", size: 11.5 },
+            format: "$0.00", // currency format
+            border: { top: { color: "FF747474", style: "thick" } },
           },
           valueParserCallback: this.excelGroupCellParser.bind(this),
         },
       },
       {
-        id: 'total',
-        name: 'Total',
-        field: 'total',
-        type: 'number',
+        id: "total",
+        name: "Total",
+        field: "total",
+        type: "number",
         sortable: true,
         width: 70,
         filterable: true,
-        cssClass: 'text-total',
+        cssClass: "text-total",
         formatter: Formatters.multiple,
         groupTotalsFormatter: GroupTotalFormatters.sumTotalsDollarBold,
         params: {
@@ -311,17 +334,17 @@ export default class Example23 {
         },
         excelExportOptions: {
           style: {
-            font: { outline: true, bold: true, color: 'FF005A9E' },
-            format: '$0.00', // currency format
+            font: { outline: false, bold: true, color: "FF005A9E" },
+            format: "$0.00", // currency format
           },
           width: 12,
           valueParserCallback: this.excelRegularCellParser.bind(this),
         },
         groupTotalsExcelExportOptions: {
           style: {
-            font: { bold: true, color: 'FF005A9E', size: 12 },
-            format: '$0.00',
-            border: { top: { color: 'FF747474', style: 'thick' } },
+            font: { bold: true, color: "FF005A9E", size: 12 },
+            format: "$0.00",
+            border: { top: { color: "FF747474", style: "thick" } },
           },
           valueParserCallback: this.excelGroupCellParser.bind(this),
         },
@@ -345,12 +368,12 @@ export default class Example23 {
       externalResources: [this.excelExportService],
       enableExcelExport: true,
       excelExportOptions: {
-        filename: 'grocery-list',
+        filename: "grocery-list",
         sanitizeDataExport: true,
-        sheetName: 'Grocery List',
+        sheetName: "Grocery List",
         columnHeaderStyle: {
-          font: { color: 'FFFFFFFF' },
-          fill: { type: 'pattern', patternType: 'solid', fgColor: 'FF4a6c91' },
+          font: { color: "FFFFFFFF" },
+          fill: { type: "pattern", patternType: "solid", fgColor: "FF4a6c91" },
         },
 
         // optionally pass a custom header to the Excel Sheet
@@ -359,17 +382,28 @@ export default class Example23 {
         customExcelHeader: (workbook, sheet) => {
           const excelFormat = workbook.getStyleSheet().createFormat({
             // every color is prefixed with FF, then regular HTML color
-            font: { size: 18, fontName: 'Calibri', bold: true, color: 'FFFFFFFF' },
-            alignment: { wrapText: true, horizontal: 'center' },
-            fill: { type: 'pattern', patternType: 'solid', fgColor: 'FF203764' },
+            font: {
+              size: 18,
+              fontName: "Calibri",
+              bold: true,
+              color: "FFFFFFFF",
+            },
+            alignment: { wrapText: true, horizontal: "center" },
+            fill: {
+              type: "pattern",
+              patternType: "solid",
+              fgColor: "FF203764",
+            },
           });
           sheet.setRowInstructions(0, { height: 40 }); // change height of row 0
 
           // excel cells start with A1 which is upper left corner
-          const customTitle = 'Grocery Shopping List';
-          const lastCellMerge = this.isDataGrouped ? 'H1' : 'G1';
-          sheet.mergeCells('A1', lastCellMerge);
-          sheet.data.push([{ value: customTitle, metadata: { style: excelFormat.id } }]);
+          const customTitle = "Grocery Shopping List";
+          const lastCellMerge = this.isDataGrouped ? "H1" : "G1";
+          sheet.mergeCells("A1", lastCellMerge);
+          sheet.data.push([
+            { value: customTitle, metadata: { style: excelFormat.id } },
+          ]);
         },
       },
     };
@@ -395,93 +429,121 @@ export default class Example23 {
     this.excelExportService.exportToExcel();
   }
 
-  excelGroupCellParser(totals: SlickGroupTotals, { columnDef, excelFormatId, dataRowIdx }: ExcelGroupValueParserArgs) {
+  excelGroupCellParser(
+    totals: SlickGroupTotals,
+    { columnDef, excelFormatId, dataRowIdx }: ExcelGroupValueParserArgs,
+  ) {
     const colOffset = 0; // col offset of 1x because we skipped 1st column OR 0 offset if we use a Group because the Group column replaces the skip
     const rowOffset = 3; // row offset of 3x because: 1x Title, 1x Headers and Excel row starts at 1 => 3
-    const priceIdx = this.sgb.slickGrid?.getColumnIndex('price') || 0;
-    const qtyIdx = this.sgb.slickGrid?.getColumnIndex('qty') || 0;
-    const taxesIdx = this.sgb.slickGrid?.getColumnIndex('taxes') || 0;
-    const subTotalIdx = this.sgb.slickGrid?.getColumnIndex('subTotal') || 0;
-    const totalIdx = this.sgb.slickGrid?.getColumnIndex('total') || 0;
+    const priceIdx = this.sgb.slickGrid?.getColumnIndex("price") || 0;
+    const qtyIdx = this.sgb.slickGrid?.getColumnIndex("qty") || 0;
+    const taxesIdx = this.sgb.slickGrid?.getColumnIndex("taxes") || 0;
+    const subTotalIdx = this.sgb.slickGrid?.getColumnIndex("subTotal") || 0;
+    const totalIdx = this.sgb.slickGrid?.getColumnIndex("total") || 0;
     const groupItemCount = totals?.group?.count || 0;
 
     // the code below calculates Excel column position dynamically, technically Price is at "B" and Qty is "C"
-    const excelPriceCol = `${String.fromCharCode('A'.charCodeAt(0) + priceIdx - colOffset)}`;
-    const excelQtyCol = `${String.fromCharCode('A'.charCodeAt(0) + qtyIdx - colOffset)}`;
-    const excelSubTotalCol = `${String.fromCharCode('A'.charCodeAt(0) + subTotalIdx - colOffset)}`;
-    const excelTaxesCol = `${String.fromCharCode('A'.charCodeAt(0) + taxesIdx - colOffset)}`;
-    const excelTotalCol = `${String.fromCharCode('A'.charCodeAt(0) + totalIdx - colOffset)}`;
+    const excelPriceCol = `${String.fromCharCode("A".charCodeAt(0) + priceIdx - colOffset)}`;
+    const excelQtyCol = `${String.fromCharCode("A".charCodeAt(0) + qtyIdx - colOffset)}`;
+    const excelSubTotalCol = `${String.fromCharCode("A".charCodeAt(0) + subTotalIdx - colOffset)}`;
+    const excelTaxesCol = `${String.fromCharCode("A".charCodeAt(0) + taxesIdx - colOffset)}`;
+    const excelTotalCol = `${String.fromCharCode("A".charCodeAt(0) + totalIdx - colOffset)}`;
 
-    let excelCol = '';
+    let excelCol = "";
     switch (columnDef.id) {
-      case 'price':
+      case "price":
         excelCol = excelPriceCol;
         break;
-      case 'qty':
+      case "qty":
         excelCol = excelQtyCol;
         break;
-      case 'subTotal':
+      case "subTotal":
         excelCol = excelSubTotalCol;
         break;
-      case 'taxes':
+      case "taxes":
         excelCol = excelTaxesCol;
         break;
-      case 'total':
+      case "total":
         excelCol = excelTotalCol;
         break;
     }
     return {
       value: `SUM(${excelCol}${dataRowIdx + rowOffset - groupItemCount}:${excelCol}${dataRowIdx + rowOffset - 1})`,
-      metadata: { type: 'formula', style: excelFormatId },
+      metadata: { type: "formula", style: excelFormatId },
     };
   }
 
   /**  We'll use a generic parser to reuse similar logic for all 3 calculable columns (SubTotal, Taxes, Total) */
-  excelRegularCellParser(_data, { columnDef, excelFormatId, dataRowIdx, dataContext }: ExcelCellValueParserArgs<GroceryItem>) {
+  excelRegularCellParser(
+    _data,
+    {
+      columnDef,
+      excelFormatId,
+      dataRowIdx,
+      dataContext,
+    }: ExcelCellValueParserArgs<GroceryItem>,
+  ) {
     // assuming that we want to calculate: (Price * Qty) => Sub-Total
     const colOffset = !this.isDataGrouped ? 1 : 0; // col offset of 1x because we skipped 1st column OR 0 offset if we use a Group because the Group column replaces the skip
     const rowOffset = 3; // row offset of 3x because: 1x Title, 1x Headers and Excel row starts at 1 => 3
-    const priceIdx = this.sgb.slickGrid?.getColumnIndex('price') || 0;
-    const qtyIdx = this.sgb.slickGrid?.getColumnIndex('qty') || 0;
-    const taxesIdx = this.sgb.slickGrid?.getColumnIndex('taxes') || 0;
+    const priceIdx = this.sgb.slickGrid?.getColumnIndex("price") || 0;
+    const qtyIdx = this.sgb.slickGrid?.getColumnIndex("qty") || 0;
+    const taxesIdx = this.sgb.slickGrid?.getColumnIndex("taxes") || 0;
 
     // the code below calculates Excel column position dynamically, technically Price is at "B" and Qty is "C"
-    const excelPriceCol = `${String.fromCharCode('A'.charCodeAt(0) + priceIdx - colOffset)}${dataRowIdx + rowOffset}`;
-    const excelQtyCol = `${String.fromCharCode('A'.charCodeAt(0) + qtyIdx - colOffset)}${dataRowIdx + rowOffset}`;
-    const excelTaxesCol = `${String.fromCharCode('A'.charCodeAt(0) + taxesIdx - colOffset)}${dataRowIdx + rowOffset}`;
+    const excelPriceCol = `${String.fromCharCode("A".charCodeAt(0) + priceIdx - colOffset)}${dataRowIdx + rowOffset}`;
+    const excelQtyCol = `${String.fromCharCode("A".charCodeAt(0) + qtyIdx - colOffset)}${dataRowIdx + rowOffset}`;
+    const excelTaxesCol = `${String.fromCharCode("A".charCodeAt(0) + taxesIdx - colOffset)}${dataRowIdx + rowOffset}`;
 
     // `value` is our Excel cells to calculat (e.g.: "B4*C4")
     // metadata `type` has to be set to "formula" and the `style` is what we defined in `excelExportOptions.style` which is `excelFormatId` in the callback arg
 
-    let excelVal = '';
+    let excelVal = "";
     switch (columnDef.id) {
-      case 'subTotal':
+      case "subTotal":
         excelVal = `${excelPriceCol}*${excelQtyCol}`; // like "C4*D4"
         break;
-      case 'taxes':
-        excelVal = dataContext.taxable ? `${excelPriceCol}*${excelQtyCol}*${this.taxRate / 100}` : '';
+      case "taxes":
+        excelVal = dataContext.taxable
+          ? `${excelPriceCol}*${excelQtyCol}*${this.taxRate / 100}`
+          : "";
         break;
-      case 'total':
+      case "total":
         excelVal = `(${excelPriceCol}*${excelQtyCol})+${excelTaxesCol}`;
         break;
     }
-    return { value: excelVal, metadata: { type: 'formula', style: excelFormatId } };
+    return {
+      value: excelVal,
+      metadata: { type: "formula", style: excelFormatId },
+    };
   }
 
   getData() {
     let i = 1;
     const datasetTmp = [
-      { id: i++, name: 'Oranges', qty: 4, taxable: false, price: 2.22 },
-      { id: i++, name: 'Apples', qty: 3, taxable: false, price: 1.55 },
-      { id: i++, name: 'Honeycomb Cereals', qty: 2, taxable: true, price: 4.55 },
-      { id: i++, name: 'Raisins', qty: 77, taxable: false, price: 0.23 },
-      { id: i++, name: 'Corn Flake Cereals', qty: 1, taxable: true, price: 6.62 },
-      { id: i++, name: 'Tomatoes', qty: 3, taxable: false, price: 1.88 },
-      { id: i++, name: 'Butter', qty: 1, taxable: false, price: 3.33 },
-      { id: i++, name: 'BBQ Chicken', qty: 1, taxable: false, price: 12.33 },
-      { id: i++, name: 'Chicken Wings', qty: 12, taxable: true, price: 0.53 },
-      { id: i++, name: 'Drinkable Yogurt', qty: 6, taxable: true, price: 1.22 },
-      { id: i++, name: 'Milk', qty: 3, taxable: true, price: 3.11 },
+      { id: i++, name: "Oranges", qty: 4, taxable: false, price: 2.22 },
+      { id: i++, name: "Apples", qty: 3, taxable: false, price: 1.55 },
+      {
+        id: i++,
+        name: "Honeycomb Cereals",
+        qty: 2,
+        taxable: true,
+        price: 4.55,
+      },
+      { id: i++, name: "Raisins", qty: 77, taxable: false, price: 0.23 },
+      {
+        id: i++,
+        name: "Corn Flake Cereals",
+        qty: 1,
+        taxable: true,
+        price: 6.62,
+      },
+      { id: i++, name: "Tomatoes", qty: 3, taxable: false, price: 1.88 },
+      { id: i++, name: "Butter", qty: 1, taxable: false, price: 3.33 },
+      { id: i++, name: "BBQ Chicken", qty: 1, taxable: false, price: 12.33 },
+      { id: i++, name: "Chicken Wings", qty: 12, taxable: true, price: 0.53 },
+      { id: i++, name: "Drinkable Yogurt", qty: 6, taxable: true, price: 1.22 },
+      { id: i++, name: "Milk", qty: 3, taxable: true, price: 3.11 },
     ] as GroceryItem[];
 
     return datasetTmp;
@@ -493,21 +555,21 @@ export default class Example23 {
   }
 
   groupByTaxable() {
-    const checkIcon = 'mdi-check-box-outline';
-    const uncheckIcon = 'mdi-checkbox-blank-outline';
+    const checkIcon = "mdi-check-box-outline";
+    const uncheckIcon = "mdi-checkbox-blank-outline";
     this.isDataGrouped = true;
 
     this.sgb?.dataView?.setGrouping({
-      getter: 'taxable',
+      getter: "taxable",
       formatter: (g) =>
         `Taxable: <span class="mdi ${g.value ? checkIcon : uncheckIcon} color-se-danger"></span> <span class="color-primary">(${g.count} items)</span>`,
       comparer: (a, b) => b.value - a.value,
       aggregators: [
-        new Aggregators.Sum('price'),
-        new Aggregators.Sum('qty'),
-        new CustomSumAggregator('subTotal', this.taxRate),
-        new CustomSumAggregator('taxes', this.taxRate),
-        new CustomSumAggregator('total', this.taxRate),
+        new Aggregators.Sum("price"),
+        new Aggregators.Sum("qty"),
+        new CustomSumAggregator("subTotal", this.taxRate),
+        new CustomSumAggregator("taxes", this.taxRate),
+        new CustomSumAggregator("total", this.taxRate),
       ],
       aggregateCollapsed: false,
       lazyTotalsCalculation: false,
